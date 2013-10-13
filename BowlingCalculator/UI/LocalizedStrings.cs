@@ -1,6 +1,6 @@
-﻿using UI.Resources;
+﻿using BowlingCalculator.UI.Resources;
 
-namespace UI {
+namespace BowlingCalculator.UI {
     /// <summary>
     /// Provides access to string resources.
     /// </summary>
