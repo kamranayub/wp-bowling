@@ -1,6 +1,7 @@
 using System.Windows.Navigation;
 using System.Diagnostics;
 using BowlingCalculator.UI.ViewModels;
+using BugSense;
 using Microsoft.Phone.Shell;
 
 namespace BowlingCalculator.UI {
@@ -35,7 +36,13 @@ namespace BowlingCalculator.UI {
 
 		    HandleFastResume();
 
-            BugSense.BugSenseHandler.Instance.InitAndStartSession(Application, "");
+            BugSenseHandler.Instance.InitAndStartSession(Application, "");
+		    BugSenseHandler.Instance.UnhandledException += (sender, args) =>
+		        {
+		            if (Debugger.IsAttached) {
+		                Debugger.Break();
+		            }
+		        };
 		}
 
         protected void EnableDebugging() {
