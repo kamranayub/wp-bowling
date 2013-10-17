@@ -10,6 +10,7 @@
     <Application.Resources>
         <local:LocalizedStrings x:Key="LocalizedStrings"/>
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:NotBooleanToVisibilityConverter x:Key="NotBooleanToVisibilityConverter"/>
     </Application.Resources>
 
     <Application.ApplicationLifetimeObjects>

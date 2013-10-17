@@ -7,8 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:BowlingCalculator.UI.ViewModels" xmlns:ui="clr-namespace:BowlingCalculator.UI"
-    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
-    xmlns:converters="clr-namespace:BowlingCalculator.UI.Converters"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"    
     xmlns:primitives="clr-namespace:System.Windows.Controls.Primitives"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
@@ -30,8 +29,7 @@
             <TextBlock Text="BOWLING CALCULATOR" Style="{StaticResource PhoneTextNormalStyle}"/>            
         </StackPanel>
 
-        <!--ContentPanel - place additional content here-->
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+        <Grid x:Name="GamePanel" Visibility="{Binding Game.IsEnded, Converter={StaticResource NotBooleanToVisibilityConverter}}" Grid.Row="1" Margin="12,0,12,0">
             
             <StackPanel Margin="{StaticResource PhoneMargin}">
                 <toolkit:ListPicker x:Name="PinPicker" FullModeHeader="Pins Knocked Down" ExpansionMode="FullScreenOnly" Visibility="Collapsed">
@@ -111,6 +109,31 @@
                 
             </StackPanel>
             
+        </Grid>
+
+        <Grid x:Name="GameOverPanel" Visibility="{Binding Game.IsEnded, Converter={StaticResource BooleanToVisibilityConverter}}" Grid.Row="1" Margin="12,0,12,0">
+
+            <StackPanel HorizontalAlignment="Center">
+                
+                <TextBlock TextAlignment="Center">And the winner is...</TextBlock>
+
+                <TextBlock TextAlignment="Center" Text="{Binding Winner.Name}"/>
+                <TextBlock TextAlignment="Center" Text="{Binding Winner.Score}"/>
+
+                <TextBlock TextAlignment="Center" Margin="{StaticResource PhoneVerticalMargin}">Runner-ups</TextBlock>
+                
+                <ItemsControl ItemsSource="{Binding RunnerUps}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                <TextBlock Text="{Binding Name}"/>
+                                <TextBlock Text="{Binding Score}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+
         </Grid>
     </Grid>
 
