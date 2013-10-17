@@ -1,6 +1,7 @@
 using System.Windows.Navigation;
 using System.Diagnostics;
 using BowlingCalculator.UI.ViewModels;
+using BugSense;
 using Microsoft.Phone.Shell;
 
 namespace BowlingCalculator.UI {
@@ -34,24 +35,21 @@ namespace BowlingCalculator.UI {
             EnableDebugging();
 
 		    HandleFastResume();
-		}
+           
+#if DEBUG
+            LogManager.GetLog = type => new DebugLogger(type);
+#else
+            BugSenseHandler.Instance.InitAndStartSession(Application, "");
+		    BugSenseHandler.Instance.UnhandledException += (sender, args) =>
+		        {
+		            if (Debugger.IsAttached) {
+		                Debugger.Break();
+		            }
+		        };
 
-        private void HandleFastResume() {
-	        bool wasReset = false;
-
-	        RootFrame.Navigating += (s, e) =>
-	            {
-                    // first call will be a Reset
-	                if (e.NavigationMode == NavigationMode.Reset) {
-                        wasReset = true;
-	                }
-                    // next call will be New (after the Reset)
-                    else if (e.NavigationMode == NavigationMode.New && wasReset) {
-                        e.Cancel = true;
-                        wasReset = false;
-                    }
-	            };
-		}
+		    LogManager.GetLog = type => new BugSenseLogger(type);
+#endif
+        }
 
         protected void EnableDebugging() {
             // Show graphics profiling information while debugging.
@@ -72,7 +70,24 @@ namespace BowlingCalculator.UI {
                 // and consume battery power when the user is not using the phone.
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             }
-        } 
+        }
+
+        private void HandleFastResume() {
+	        bool wasReset = false;
+
+	        RootFrame.Navigating += (s, e) =>
+	            {
+                    // first call will be a Reset
+	                if (e.NavigationMode == NavigationMode.Reset) {
+                        wasReset = true;
+	                }
+                    // next call will be New (after the Reset)
+                    else if (e.NavigationMode == NavigationMode.New && wasReset) {
+                        e.Cancel = true;
+                        wasReset = false;
+                    }
+	            };
+		}
 
 		protected override object GetInstance(Type service, string key)
 		{
@@ -128,4 +143,52 @@ namespace BowlingCalculator.UI {
 				};
 		}
 	}
+
+    public class DebugLogger : ILog {
+        private readonly Type _type;
+        private const string DateFormat = "hh:mm:ss.ffff";
+
+        public DebugLogger(Type type) {
+            _type = type;
+        }
+
+        public void Info(string format, params object[] args) {
+
+            Debug.WriteLine(String.Format("{0} INFO [Thread:{2}][{1}] - ", DateTime.Now.ToString(DateFormat), _type.Name, System.Threading.Thread.CurrentThread.ManagedThreadId) + format, args);
+
+        }
+
+        public void Warn(string format, params object[] args) {
+
+            Debug.WriteLine(String.Format("{0} WARN [Thread:{2}][{1}] - ", DateTime.Now.ToString(DateFormat), _type.Name, System.Threading.Thread.CurrentThread.ManagedThreadId) + format, args);
+
+        }
+
+        public void Error(Exception exception) {
+
+            Debug.WriteLine(String.Format("{0} ERROR [Thread:{2}][{1}] - ", DateTime.Now.ToString(DateFormat), _type.Name, System.Threading.Thread.CurrentThread.ManagedThreadId) + exception.Message);
+            Debug.WriteLine(exception.StackTrace);
+
+        }
+    }
+
+    public class BugSenseLogger : ILog {
+        private readonly Type _type;
+
+        public BugSenseLogger(Type type) {
+            _type = type;
+        }
+
+        public void Info(string format, params object[] args) {
+            // do nothing
+        }
+
+        public void Warn(string format, params object[] args) {
+            // do nothing
+        }
+
+        public void Error(Exception exception) {
+            BugSenseHandler.Instance.LogException(exception, "sender", _type.FullName);
+        }
+    }
 }
