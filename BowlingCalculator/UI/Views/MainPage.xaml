@@ -1,5 +1,5 @@
 ﻿<phone:PhoneApplicationPage
-    x:Class="BowlingCalculator.UI.MainPage"
+    x:Class="BowlingCalculator.UI.Views.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
@@ -48,7 +48,7 @@
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
             <StackPanel>
-                <Button x:Name="NewGame" Content="New Game" Click="NewGame_Click"></Button>
+                <Button x:Name="NewGame" Content="New Game"/>
             </StackPanel>
         </Grid>
 

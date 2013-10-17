@@ -1,5 +1,5 @@
-﻿<phone:PhoneApplicationPage
-    x:Class="BowlingCalculator.UI.NewGamePage"
+<phone:PhoneApplicationPage
+    x:Class="BowlingCalculator.UI.Views.NewGamePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
@@ -38,7 +38,7 @@
 
                 <TextBox x:Name="Player2" InputScope="PersonalFullName"></TextBox>
                 
-                <Button x:Name="CreateNewGame" Click="CreateNewGame_Click">Create New Game</Button>
+                <Button x:Name="CreateNewGame">Create New Game</Button>
             </StackPanel>
         </Grid>
     </Grid>

@@ -1,5 +1,5 @@
-﻿<phone:PhoneApplicationPage
-    x:Class="BowlingCalculator.UI.GamePage"
+<phone:PhoneApplicationPage
+    x:Class="BowlingCalculator.UI.Views.GamePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
@@ -9,12 +9,14 @@
     xmlns:viewModels="clr-namespace:BowlingCalculator.UI.ViewModels" xmlns:ui="clr-namespace:BowlingCalculator.UI"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"    
     xmlns:primitives="clr-namespace:System.Windows.Controls.Primitives"
+    xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Landscape" Orientation="Landscape"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type=viewModels:GamePageViewModel}"
+    cal:Bind.AtDesignTime="True"
     shell:SystemTray.IsVisible="False">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
@@ -61,7 +63,7 @@
                                         </ItemsControl.ItemsPanel>
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
-                                                <Border Tap="BowlingFrame_OnTap" BorderBrush="White" BorderThickness="1" Margin="0,0,0,0">
+                                                <Border cal:Message.Attach="[Event Tap] = [PickPins($dataContext)]"  BorderBrush="White" BorderThickness="1" Margin="0,0,0,0">
                                                     <Grid>
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="45*"/>
