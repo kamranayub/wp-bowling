@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<releases>  
+  <release version="1.0.0">
+    <![CDATA[
+- Calculates bowling scores
+- Supports any number of players
+- Supports Fast Resume
+- About page
+    ]]>
+  </release>
+</releases>

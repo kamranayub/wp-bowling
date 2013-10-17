@@ -13,5 +13,9 @@ namespace BowlingCalculator.UI.ViewModels {
         public void NewGame() {
             _navigation.UriFor<NewGamePageViewModel>().Navigate();
         }
+
+        public void About() {
+            _navigation.UriFor<AboutPageViewModel>().Navigate();
+        }
     }
 }

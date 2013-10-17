@@ -88,6 +88,25 @@ namespace BowlingCalculator.UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;releases&gt;  
+        ///  &lt;release version=&quot;1.0.0&quot;&gt;
+        ///    &lt;![CDATA[
+        ///- Calculates bowling scores
+        ///- Supports any number of players
+        ///- Supports Fast Resume
+        ///- About page
+        ///    ]]&gt;
+        ///  &lt;/release&gt;
+        ///&lt;/releases&gt;.
+        /// </summary>
+        public static string ReleaseNotes {
+            get {
+                return ResourceManager.GetString("ReleaseNotes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to LeftToRight.
         /// </summary>
         public static string ResourceFlowDirection {

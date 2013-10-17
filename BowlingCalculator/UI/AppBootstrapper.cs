@@ -1,5 +1,6 @@
 using System.Windows.Navigation;
 using System.Diagnostics;
+using BowlingCalculator.UI.Controls;
 using BowlingCalculator.UI.ViewModels;
 using BugSense;
 using Microsoft.Phone.Shell;
@@ -27,6 +28,8 @@ namespace BowlingCalculator.UI {
 				container.RegisterPhoneServices(RootFrame);
 
 			container.PerRequest<MainPageViewModel>();
+            container.PerRequest<AboutPageViewModel>();
+            container.PerRequest<ChangelogPageViewModel>();
 		    container.PerRequest<NewGamePageViewModel>();
 		    container.PerRequest<GamePageViewModel>();
 
@@ -108,8 +111,8 @@ namespace BowlingCalculator.UI {
 			container.BuildUp(instance);
 		}
 
-		static void AddCustomConventions()
-		{
+		static void AddCustomConventions() {
+		    ConventionManager.AddElementConvention<RoundButton>(Control.IsEnabledProperty, "DataContext", "Click");
 			ConventionManager.AddElementConvention<Pivot>(Pivot.ItemsSourceProperty, "SelectedItem", "SelectionChanged").ApplyBinding =
 				(viewModelType, path, property, element, convention) => {
 					if (ConventionManager
