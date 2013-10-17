@@ -1,44 +1,41 @@
-using System.Windows.Navigation;
-using System.Diagnostics;
 using BowlingCalculator.UI.Controls;
 using BowlingCalculator.UI.ViewModels;
 using BugSense;
+using Caliburn.Micro;
+using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Windows.Controls;
+using System.Windows.Navigation;
 
 namespace BowlingCalculator.UI {
-	using System;
-	using System.Collections.Generic;
-	using System.Windows.Controls;
-	using Microsoft.Phone.Controls;
-	using Caliburn.Micro;
 
-	public class AppBootstrapper : PhoneBootstrapperBase
-	{
-		PhoneContainer container;
+    public class AppBootstrapper : PhoneBootstrapperBase {
+        PhoneContainer container;
 
-		public AppBootstrapper()
-		{
-			Start();
-		}
+        public AppBootstrapper() {
+            Start();
+        }
 
-		protected override void Configure()
-		{
-			container = new PhoneContainer();
-			if (!Execute.InDesignMode)
-				container.RegisterPhoneServices(RootFrame);
+        protected override void Configure() {
+            container = new PhoneContainer();
+            if (!Execute.InDesignMode)
+                container.RegisterPhoneServices(RootFrame);
 
-			container.PerRequest<MainPageViewModel>();
+            container.PerRequest<MainPageViewModel>();
             container.PerRequest<AboutPageViewModel>();
             container.PerRequest<ChangelogPageViewModel>();
-		    container.PerRequest<NewGamePageViewModel>();
-		    container.PerRequest<GamePageViewModel>();
+            container.PerRequest<NewGamePageViewModel>();
+            container.PerRequest<GamePageViewModel>();
 
-			AddCustomConventions();
+            AddCustomConventions();
 
             EnableDebugging();
 
-		    HandleFastResume();
-           
+            HandleFastResume();
+
 #if DEBUG
             LogManager.GetLog = type => new DebugLogger(type);
 #else
@@ -76,76 +73,70 @@ namespace BowlingCalculator.UI {
         }
 
         private void HandleFastResume() {
-	        bool wasReset = false;
+            bool wasReset = false;
 
-	        RootFrame.Navigating += (s, e) =>
-	            {
-                    // first call will be a Reset
-	                if (e.NavigationMode == NavigationMode.Reset) {
-                        wasReset = true;
-	                }
+            RootFrame.Navigating += (s, e) => {
+                // first call will be a Reset
+                if (e.NavigationMode == NavigationMode.Reset) {
+                    wasReset = true;
+                }
                     // next call will be New (after the Reset)
-                    else if (e.NavigationMode == NavigationMode.New && wasReset) {
-                        e.Cancel = true;
-                        wasReset = false;
+                else if (e.NavigationMode == NavigationMode.New && wasReset) {
+                    e.Cancel = true;
+                    wasReset = false;
+                }
+            };
+        }
+
+        protected override object GetInstance(Type service, string key) {
+            var instance = container.GetInstance(service, key);
+            if (instance != null)
+                return instance;
+
+            throw new InvalidOperationException("Could not locate any instances.");
+        }
+
+        protected override IEnumerable<object> GetAllInstances(Type service) {
+            return container.GetAllInstances(service);
+        }
+
+        protected override void BuildUp(object instance) {
+            container.BuildUp(instance);
+        }
+
+        static void AddCustomConventions() {
+            ConventionManager.AddElementConvention<RoundButton>(Control.IsEnabledProperty, "DataContext", "Click");
+            ConventionManager.AddElementConvention<Pivot>(Pivot.ItemsSourceProperty, "SelectedItem", "SelectionChanged").ApplyBinding =
+                (viewModelType, path, property, element, convention) => {
+                    if (ConventionManager
+                        .GetElementConvention(typeof(ItemsControl))
+                        .ApplyBinding(viewModelType, path, property, element, convention)) {
+                        ConventionManager
+                            .ConfigureSelectedItem(element, Pivot.SelectedItemProperty, viewModelType, path);
+                        ConventionManager
+                            .ApplyHeaderTemplate(element, Pivot.HeaderTemplateProperty, null, viewModelType);
+                        return true;
                     }
-	            };
-		}
 
-		protected override object GetInstance(Type service, string key)
-		{
-			var instance = container.GetInstance(service, key);
-			if (instance != null)
-				return instance;
+                    return false;
+                };
 
-			throw new InvalidOperationException("Could not locate any instances.");
-		}
+            ConventionManager.AddElementConvention<Panorama>(Panorama.ItemsSourceProperty, "SelectedItem", "SelectionChanged").ApplyBinding =
+                (viewModelType, path, property, element, convention) => {
+                    if (ConventionManager
+                        .GetElementConvention(typeof(ItemsControl))
+                        .ApplyBinding(viewModelType, path, property, element, convention)) {
+                        ConventionManager
+                            .ConfigureSelectedItem(element, Panorama.SelectedItemProperty, viewModelType, path);
+                        ConventionManager
+                            .ApplyHeaderTemplate(element, Panorama.HeaderTemplateProperty, null, viewModelType);
+                        return true;
+                    }
 
-		protected override IEnumerable<object> GetAllInstances(Type service)
-		{
-			return container.GetAllInstances(service);
-		}
-
-		protected override void BuildUp(object instance)
-		{
-			container.BuildUp(instance);
-		}
-
-		static void AddCustomConventions() {
-		    ConventionManager.AddElementConvention<RoundButton>(Control.IsEnabledProperty, "DataContext", "Click");
-			ConventionManager.AddElementConvention<Pivot>(Pivot.ItemsSourceProperty, "SelectedItem", "SelectionChanged").ApplyBinding =
-				(viewModelType, path, property, element, convention) => {
-					if (ConventionManager
-						.GetElementConvention(typeof(ItemsControl))
-						.ApplyBinding(viewModelType, path, property, element, convention))
-					{
-						ConventionManager
-							.ConfigureSelectedItem(element, Pivot.SelectedItemProperty, viewModelType, path);
-						ConventionManager
-							.ApplyHeaderTemplate(element, Pivot.HeaderTemplateProperty, null, viewModelType);
-						return true;
-					}
-
-					return false;
-				};
-
-			ConventionManager.AddElementConvention<Panorama>(Panorama.ItemsSourceProperty, "SelectedItem", "SelectionChanged").ApplyBinding =
-				(viewModelType, path, property, element, convention) => {
-					if (ConventionManager
-						.GetElementConvention(typeof(ItemsControl))
-						.ApplyBinding(viewModelType, path, property, element, convention))
-					{
-						ConventionManager
-							.ConfigureSelectedItem(element, Panorama.SelectedItemProperty, viewModelType, path);
-						ConventionManager
-							.ApplyHeaderTemplate(element, Panorama.HeaderTemplateProperty, null, viewModelType);
-						return true;
-					}
-
-					return false;
-				};
-		}
-	}
+                    return false;
+                };
+        }
+    }
 
     public class DebugLogger : ILog {
         private readonly Type _type;
