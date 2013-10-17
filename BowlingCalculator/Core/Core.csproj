@@ -84,10 +84,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Bowling.cs" />
+    <Compile Include="BowlingException.cs" />
     <Compile Include="BowlingFrame.cs" />
     <Compile Include="BowlingPlayer.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyChangedBase.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />

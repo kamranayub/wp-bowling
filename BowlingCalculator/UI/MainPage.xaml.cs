@@ -1,4 +1,5 @@
-﻿using Microsoft.Phone.Controls;
+﻿using System;
+using Microsoft.Phone.Controls;
 
 namespace BowlingCalculator.UI {
     public partial class MainPage : PhoneApplicationPage {
@@ -8,6 +9,10 @@ namespace BowlingCalculator.UI {
 
             // Sample code to localize the ApplicationBar
             //BuildLocalizedApplicationBar();
+        }
+
+        private void NewGame_Click(object sender, System.Windows.RoutedEventArgs e) {
+            this.NavigationService.Navigate(new Uri("/NewGamePage.xaml", UriKind.Relative));
         }
 
         // Sample code for building a localized ApplicationBar

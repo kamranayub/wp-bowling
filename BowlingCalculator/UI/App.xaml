@@ -4,11 +4,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
-    xmlns:local="clr-namespace:BowlingCalculator.UI">
+    xmlns:local="clr-namespace:BowlingCalculator.UI" xmlns:converters="clr-namespace:BowlingCalculator.UI.Converters">
 
     <!--Application Resources-->
     <Application.Resources>
         <local:LocalizedStrings x:Key="LocalizedStrings"/>
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Application.Resources>
 
     <Application.ApplicationLifetimeObjects>

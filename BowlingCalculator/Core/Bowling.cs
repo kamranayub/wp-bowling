@@ -1,29 +1,49 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using BowlingCalculator.Core.Annotations;
 
 namespace BowlingCalculator.Core {
-    public class Bowling {
+    public class Bowling : INotifyPropertyChanged {
+        private bool _isEnded;
+        private int _currentFrame;
+        private BowlingPlayer _currentPlayer;
+
         public Bowling() {
             Players = new ObservableCollection<BowlingPlayer>();
-        }
-
-        public int CurrentFrame { get; private set; }
-
-        public BowlingPlayer CurrentPlayer { get; private set; }
-
-        public IList<BowlingPlayer> Players { get; private set; }
-
-        public bool IsEnded { get; set; }
-
-        public void Start() {
-            if (Players.Count == 0) {
-                throw new BowlingException("There must be at least one player");
-            }
 
             CurrentFrame = 1;
-            CurrentPlayer = Players[0];
+        }
+
+        public int CurrentFrame {
+            get { return _currentFrame; }
+            private set {
+                if (value == _currentFrame) return;
+                _currentFrame = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public BowlingPlayer CurrentPlayer {
+            get { return _currentPlayer; }
+            private set {
+                if (Equals(value, _currentPlayer)) return;
+                _currentPlayer = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<BowlingPlayer> Players { get; private set; }
+
+        public bool IsEnded {
+            get { return _isEnded; }
+            set {
+                if (value.Equals(_isEnded)) return;
+                _isEnded = value;
+                OnPropertyChanged();
+            }
         }
 
         public BowlingPlayer AddPlayer(string playerName) {
@@ -31,20 +51,45 @@ namespace BowlingCalculator.Core {
 
             Players.Add(newPlayer);
 
+            // game hasn't started
+            if (CurrentPlayer == null) {
+                CurrentPlayer = Players[0];
+                CurrentPlayer.Frames.First().IsCurrentFrame = true;
+            }
+
             return newPlayer;
         }
 
         public void Bowl(int pins) {
-            if (CurrentPlayer == null) return;
+            if (CurrentPlayer == null || IsEnded) return;
 
+            // Take turn
             CurrentPlayer.Bowl(CurrentFrame, pins);
+
+            // Update frame scores
+            int? prevScore = 0;
+            int prevCumulativeScore = 0;
+            for (var i = 0; i < CurrentPlayer.Frames.Count; i++) {
+                var frame = CurrentPlayer.Frames[i];
+                int? score = frame.GetScore(CurrentPlayer.Frames);                
+
+                if (frame.IsDone() && prevScore != null && score != null) {
+                    frame.CumulativeScore = prevCumulativeScore + score;
+                }
+
+                prevScore = score;
+                prevCumulativeScore += score.GetValueOrDefault();
+            }
+
+            // Update player scores
+            CurrentPlayer.Score = CurrentPlayer.GetScore();
 
             bool isEndOfTurn = CurrentPlayer.Frames[CurrentFrame - 1].IsDone();
             bool isLastPlayer = Players.Last() == CurrentPlayer;
 
-            if (CurrentFrame == Constants.Frames && isLastPlayer) {
+            if (CurrentFrame == Constants.Frames && isLastPlayer && isEndOfTurn) {
                 // End game
-                IsEnded = true;
+                EndGame();
                 return;
             } else if (isEndOfTurn && isLastPlayer) {
                 // Advance frame
@@ -57,8 +102,19 @@ namespace BowlingCalculator.Core {
             }
         }
 
+        public void Reset() {
+            CurrentPlayer = Players[0];
+            CurrentFrame = 1;
+
+            foreach (var player in Players) {
+                player.Reset();
+            }
+
+            UpdateCurrentFrame();
+        }
+
         private void NextFrame() {
-            CurrentFrame++;
+            CurrentFrame++;            
         }
 
         private void NextTurn() {
@@ -70,12 +126,31 @@ namespace BowlingCalculator.Core {
             else {
                 CurrentPlayer = Players[curIndex + 1];
             }
+
+            UpdateCurrentFrame();
         }
-    }
 
-    public class BowlingException : Exception {
-        public BowlingException(string message) : base(message) {
+        private void EndGame() {
+            IsEnded = true;
+            UpdateCurrentFrame();
+        }
 
+        private void UpdateCurrentFrame() {            
+            foreach (var player in Players) {
+                foreach (var frame in player.Frames) {
+                    frame.IsCurrentFrame = !IsEnded &&
+                        CurrentFrame == frame.Index + 1 &&
+                        CurrentPlayer == player;
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

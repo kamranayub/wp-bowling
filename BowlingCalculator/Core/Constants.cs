@@ -7,5 +7,6 @@ using System.Threading.Tasks;
 namespace BowlingCalculator.Core {
     public class Constants {
         public const int Frames = 10;
+        public const int TotalPins = 10;
     }
 }
