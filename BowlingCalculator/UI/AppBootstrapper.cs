@@ -30,6 +30,8 @@ namespace BowlingCalculator.UI {
 			AddCustomConventions();
 
 		    HandleFastResume();
+
+            BugSense.BugSenseHandler.Instance.InitAndStartSession(Application, "");
 		}
 
         private void HandleFastResume() {
