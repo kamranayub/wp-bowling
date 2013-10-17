@@ -1,3 +1,4 @@
+using System.Windows.Navigation;
 using BowlingCalculator.UI.ViewModels;
 
 namespace BowlingCalculator.UI {
@@ -27,9 +28,28 @@ namespace BowlingCalculator.UI {
 		    container.PerRequest<GamePageViewModel>();
 
 			AddCustomConventions();
+
+		    HandleFastResume();
 		}
 
-		protected override object GetInstance(Type service, string key)
+        private void HandleFastResume() {
+	        bool wasReset = false;
+
+	        RootFrame.Navigating += (s, e) =>
+	            {
+                    // first call will be a Reset
+	                if (e.NavigationMode == NavigationMode.Reset) {
+                        wasReset = true;
+	                }
+                    // next call will be New (after the Reset)
+                    else if (e.NavigationMode == NavigationMode.New && wasReset) {
+                        e.Cancel = true;
+                        wasReset = false;
+                    }
+	            };
+	    }
+
+	    protected override object GetInstance(Type service, string key)
 		{
 			var instance = container.GetInstance(service, key);
 			if (instance != null)
