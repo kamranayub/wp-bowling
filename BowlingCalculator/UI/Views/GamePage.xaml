@@ -145,29 +145,44 @@
             
         </Grid>
 
-        <Grid x:Name="GameOverPanel" Visibility="{Binding Game.IsEnded, Converter={StaticResource BooleanToVisibilityConverter}}" Grid.Row="1" Margin="12,0,12,0">
-
-            <StackPanel HorizontalAlignment="Center">
+        <Grid x:Name="GameOverPanel" Visibility="{Binding Game.IsEnded, Converter={StaticResource BooleanToVisibilityConverter}}" Grid.Row="1" Margin="12,28,12,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <StackPanel Grid.Column="0" HorizontalAlignment="Center">
                 
-                <TextBlock TextAlignment="Center">And the winner is...</TextBlock>
+                <TextBlock TextAlignment="Center"
+                           Margin="{StaticResource PhoneVerticalMargin}"
+                           Foreground="{StaticResource PhoneSubtleBrush}">And the winner is...</TextBlock>
 
-                <TextBlock TextAlignment="Center" Text="{Binding Winner.Name}"/>
-                <TextBlock TextAlignment="Center" Text="{Binding Winner.Score}"/>
+                <TextBlock TextAlignment="Center" 
+                           Text="{Binding Winner.Name}"
+                           FontSize="{StaticResource PhoneFontSizeExtraExtraLarge}"/>
+                <TextBlock TextAlignment="Center" 
+                           Text="{Binding Winner.Score}"
+                           FontSize="{StaticResource PhoneFontSizeHuge}"/>                
+            </StackPanel>
+            <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                <TextBlock TextAlignment="Center"
+                           Foreground="{StaticResource PhoneSubtleBrush}"
+                           Margin="{StaticResource PhoneVerticalMargin}">Runner-ups</TextBlock>
 
-                <TextBlock TextAlignment="Center" Margin="{StaticResource PhoneVerticalMargin}">Runner-ups</TextBlock>
-                
                 <ItemsControl ItemsSource="{Binding RunnerUps}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                <TextBlock Text="{Binding Name}"/>
-                                <TextBlock Text="{Binding Score}"/>
+                                <TextBlock Text="{Binding Name}"
+                                           Margin="{StaticResource PhoneMargin}"/>
+                                <TextBlock Text="{Binding Score}"
+                                           Margin="{StaticResource PhoneMargin}"
+                                           Foreground="{StaticResource PhoneSubtleBrush}"/>
                             </StackPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </StackPanel>
-
         </Grid>
     </Grid>
 
