@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="BowlingCalculator.UI.Views.PinPickerView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:BowlingCalculator.UI.ViewModels"
+    xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    mc:Ignorable="d"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    cal:Bind.AtDesignTime="True"
+    d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type=viewModels:PinPickerViewModel}"
+    d:DesignHeight="480" d:DesignWidth="480">
+    
+    <StackPanel x:Name="LayoutRoot">
+        
+        <ListBox ItemsSource="{Binding Pins}">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <toolkit:WrapPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid Background="{StaticResource PhoneAccentBrush}"
+                          Margin="10"
+                          Width="{StaticResource PhoneFontSizeExtraExtraLarge}"
+                          cal:Message.Attach="[Event Tap] = [SelectPins($dataContext)]">
+                        <TextBlock Text="{Binding}"
+                                   FontSize="{StaticResource PhoneFontSizeExtraLarge}"
+                                   Margin="10"/>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </StackPanel>
+</UserControl>

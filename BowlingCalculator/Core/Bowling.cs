@@ -10,6 +10,7 @@ namespace BowlingCalculator.Core {
         private bool _isEnded;
         private int _currentFrame;
         private BowlingPlayer _currentPlayer;
+        private bool _isStarted;
 
         public Bowling() {
             Players = new ObservableCollection<BowlingPlayer>();
@@ -46,10 +47,23 @@ namespace BowlingCalculator.Core {
             }
         }
 
+        /// <summary>
+        /// At least one player has bowled
+        /// </summary>
+        public bool IsStarted {
+            get { return _isStarted; }
+            set {
+                if (value.Equals(_isStarted)) return;
+                _isStarted = value;
+                OnPropertyChanged();
+            }
+        }
+
         public BowlingPlayer AddPlayer(string playerName) {
             var newPlayer = new BowlingPlayer() {Name = playerName};
 
-            Players.Add(newPlayer);
+            Players.Add(newPlayer);            
+            OnPropertyChanged("Players");
 
             // game hasn't started
             if (CurrentPlayer == null) {
@@ -62,6 +76,11 @@ namespace BowlingCalculator.Core {
 
         public void Bowl(int pins) {
             if (CurrentPlayer == null || IsEnded) return;
+
+            // Started
+            if (!IsStarted) {
+                IsStarted = true;
+            }
 
             // Take turn
             CurrentPlayer.Bowl(CurrentFrame, pins);
@@ -103,6 +122,7 @@ namespace BowlingCalculator.Core {
         }
 
         public void Reset() {
+            IsStarted = false;
             CurrentPlayer = Players[0];
             CurrentFrame = 1;
 

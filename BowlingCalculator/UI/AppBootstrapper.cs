@@ -1,49 +1,78 @@
+using System.Windows;
+using System.Windows.Navigation;
+using System.Diagnostics;
 using BowlingCalculator.UI.Controls;
 using BowlingCalculator.UI.ViewModels;
 using BugSense;
-using Caliburn.Micro;
-using Microsoft.Phone.Controls;
+using Caliburn.Micro.BindableAppBar;
 using Microsoft.Phone.Shell;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Windows.Controls;
-using System.Windows.Navigation;
 
 namespace BowlingCalculator.UI {
+	using System;
+	using System.Collections.Generic;
+	using System.Windows.Controls;
+	using Microsoft.Phone.Controls;
+	using Caliburn.Micro;
 
-    public class AppBootstrapper : PhoneBootstrapperBase {
-        PhoneContainer container;
+    /// <summary>
+    /// Bowling custom phone app bootstrapper
+    /// </summary>
+    public class BowlingBootstrapperBase : PhoneBootstrapperBase {
 
-        public AppBootstrapper() {
-            Start();
+        /// <summary>
+        /// Enable transitions
+        /// </summary>
+        /// <returns></returns>
+        protected override PhoneApplicationFrame CreatePhoneApplicationFrame() {
+            return new TransitionFrame();
         }
+    }
 
-        protected override void Configure() {
-            container = new PhoneContainer();
-            if (!Execute.InDesignMode)
-                container.RegisterPhoneServices(RootFrame);
+    public class AppBootstrapper : BowlingBootstrapperBase
+	{
+		PhoneContainer container;
 
-            container.PerRequest<MainPageViewModel>();
+		public AppBootstrapper()
+		{
+			Start();
+		}
+
+		protected override void Configure()
+		{
+			container = new PhoneContainer();
+			if (!Execute.InDesignMode)
+				container.RegisterPhoneServices(RootFrame);
+
+			container.Singleton<MainPageViewModel>();
+            container.Singleton<GamePageViewModel>();
+            // works around issue with storage handler
+            // see: https://caliburnmicro.codeplex.com/workitem/340
+            container.Singleton<AddPlayerPageViewModel>();
+
+		    container.PerRequest<PinPickerViewModel>();
             container.PerRequest<AboutPageViewModel>();
             container.PerRequest<ChangelogPageViewModel>();
-            container.PerRequest<NewGamePageViewModel>();
-            container.PerRequest<GamePageViewModel>();
+		    	    
 
-            AddCustomConventions();
+			AddCustomConventions();
 
             EnableDebugging();
 
-            HandleFastResume();
-
+		    HandleFastResume();
+           
 #if DEBUG
-            LogManager.GetLog = type => new DebugLogger(type);
+            LogManager.GetLog = type => new DebugLogger(type);            
 #else
             BugSenseHandler.Instance.InitAndStartSession(Application, "");
 		    BugSenseHandler.Instance.UnhandledException += (sender, args) =>
 		        {
 		            if (Debugger.IsAttached) {
 		                Debugger.Break();
+		            }
+		            else {
+		                MessageBox.Show(
+		                    "An error report will be sent so we can improve the app, please try running the app again!",
+		                    "An error occurred", MessageBoxButton.OK);
 		            }
 		        };
 
@@ -72,71 +101,90 @@ namespace BowlingCalculator.UI {
             }
         }
 
+        protected override void OnUnhandledException(object sender, System.Windows.ApplicationUnhandledExceptionEventArgs e) {
+            if (Debugger.IsAttached) {
+                Debugger.Break();
+            }
+        }
+
         private void HandleFastResume() {
-            bool wasReset = false;
+	        bool wasReset = false;
 
-            RootFrame.Navigating += (s, e) => {
-                // first call will be a Reset
-                if (e.NavigationMode == NavigationMode.Reset) {
-                    wasReset = true;
-                }
+	        RootFrame.Navigating += (s, e) =>
+	            {
+                    // first call will be a Reset
+	                if (e.NavigationMode == NavigationMode.Reset) {
+                        wasReset = true;
+	                }
                     // next call will be New (after the Reset)
-                else if (e.NavigationMode == NavigationMode.New && wasReset) {
-                    e.Cancel = true;
-                    wasReset = false;
-                }
-            };
-        }
-
-        protected override object GetInstance(Type service, string key) {
-            var instance = container.GetInstance(service, key);
-            if (instance != null)
-                return instance;
-
-            throw new InvalidOperationException("Could not locate any instances.");
-        }
-
-        protected override IEnumerable<object> GetAllInstances(Type service) {
-            return container.GetAllInstances(service);
-        }
-
-        protected override void BuildUp(object instance) {
-            container.BuildUp(instance);
-        }
-
-        static void AddCustomConventions() {
-            ConventionManager.AddElementConvention<RoundButton>(Control.IsEnabledProperty, "DataContext", "Click");
-            ConventionManager.AddElementConvention<Pivot>(Pivot.ItemsSourceProperty, "SelectedItem", "SelectionChanged").ApplyBinding =
-                (viewModelType, path, property, element, convention) => {
-                    if (ConventionManager
-                        .GetElementConvention(typeof(ItemsControl))
-                        .ApplyBinding(viewModelType, path, property, element, convention)) {
-                        ConventionManager
-                            .ConfigureSelectedItem(element, Pivot.SelectedItemProperty, viewModelType, path);
-                        ConventionManager
-                            .ApplyHeaderTemplate(element, Pivot.HeaderTemplateProperty, null, viewModelType);
-                        return true;
+                    // only cancel if we're heading to MainPage
+                    else if (e.NavigationMode == NavigationMode.New && wasReset && e.Uri.ToString().Contains("MainPage.xaml")) {
+                        e.Cancel = true;
+                        wasReset = false;
                     }
+	            };
+		}
 
-                    return false;
-                };
+		protected override object GetInstance(Type service, string key)
+		{
+			var instance = container.GetInstance(service, key);
+			if (instance != null)
+				return instance;
 
-            ConventionManager.AddElementConvention<Panorama>(Panorama.ItemsSourceProperty, "SelectedItem", "SelectionChanged").ApplyBinding =
-                (viewModelType, path, property, element, convention) => {
-                    if (ConventionManager
-                        .GetElementConvention(typeof(ItemsControl))
-                        .ApplyBinding(viewModelType, path, property, element, convention)) {
-                        ConventionManager
-                            .ConfigureSelectedItem(element, Panorama.SelectedItemProperty, viewModelType, path);
-                        ConventionManager
-                            .ApplyHeaderTemplate(element, Panorama.HeaderTemplateProperty, null, viewModelType);
-                        return true;
-                    }
+			throw new InvalidOperationException("Could not locate any instances.");
+		}
 
-                    return false;
-                };
-        }
-    }
+		protected override IEnumerable<object> GetAllInstances(Type service)
+		{
+			return container.GetAllInstances(service);
+		}
+
+		protected override void BuildUp(object instance)
+		{
+			container.BuildUp(instance);
+		}
+
+		static void AddCustomConventions() {
+            // App Bar Conventions
+            ConventionManager.AddElementConvention<BindableAppBarButton>(
+                Control.IsEnabledProperty, "DataContext", "Click");
+            ConventionManager.AddElementConvention<BindableAppBarMenuItem>(
+                Control.IsEnabledProperty, "DataContext", "Click");
+
+		    ConventionManager.AddElementConvention<RoundButton>(Control.IsEnabledProperty, "DataContext", "Click");
+			ConventionManager.AddElementConvention<Pivot>(Pivot.ItemsSourceProperty, "SelectedItem", "SelectionChanged").ApplyBinding =
+				(viewModelType, path, property, element, convention) => {
+					if (ConventionManager
+						.GetElementConvention(typeof(ItemsControl))
+						.ApplyBinding(viewModelType, path, property, element, convention))
+					{
+						ConventionManager
+							.ConfigureSelectedItem(element, Pivot.SelectedItemProperty, viewModelType, path);
+						ConventionManager
+							.ApplyHeaderTemplate(element, Pivot.HeaderTemplateProperty, null, viewModelType);
+						return true;
+					}
+
+					return false;
+				};
+
+			ConventionManager.AddElementConvention<Panorama>(Panorama.ItemsSourceProperty, "SelectedItem", "SelectionChanged").ApplyBinding =
+				(viewModelType, path, property, element, convention) => {
+					if (ConventionManager
+						.GetElementConvention(typeof(ItemsControl))
+						.ApplyBinding(viewModelType, path, property, element, convention))
+					{
+						ConventionManager
+							.ConfigureSelectedItem(element, Panorama.SelectedItemProperty, viewModelType, path);
+						ConventionManager
+							.ApplyHeaderTemplate(element, Panorama.HeaderTemplateProperty, null, viewModelType);
+						return true;
+					}
+
+					return false;
+				};
+		}
+	}
 
     public class DebugLogger : ILog {
         private readonly Type _type;

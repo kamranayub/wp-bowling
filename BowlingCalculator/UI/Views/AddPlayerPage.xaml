@@ -1,22 +1,22 @@
-﻿<phone:PhoneApplicationPage
-    x:Class="BowlingCalculator.UI.Views.MainPage"
+<phone:PhoneApplicationPage
+    x:Class="BowlingCalculator.UI.Views.AddPlayerPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
-    xmlns:viewModels="clr-namespace:BowlingCalculator.UI.ViewModels"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
-    mc:Ignorable="d"
+    xmlns:viewModels="clr-namespace:BowlingCalculator.UI.ViewModels"
+    xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Landscape" Orientation="Landscape"
-    shell:SystemTray.IsVisible="True"
-    d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type=viewModels:MainPageViewModel}"
-    cal:Bind.AtDesignTime="True">
+    d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type=viewModels:AddPlayerPageViewModel}"
+    mc:Ignorable="d"
+    cal:Bind.AtDesignTime="True"
+    shell:SystemTray.IsVisible="True">
 
     <!--Transitions-->
     <toolkit:TransitionService.NavigationInTransition>
@@ -48,13 +48,44 @@
         </Grid.RowDefinitions>
 
         <!--TitlePanel contains the name of the application and page title-->
-        <StackPanel Grid.Row="0" Margin="12,17,0,0">
-            <TextBlock Text="BOWLING CALCULATOR" 
-                       Style="{StaticResource PhoneTextNormalStyle}"
-                       toolkit:TurnstileFeatherEffect.FeatheringIndex="0"/>
+        <StackPanel Grid.Row="0" Margin="12,17,0,28">
+            <TextBlock Text="ADD PLAYER" Style="{StaticResource PhoneTextNormalStyle}"/>            
         </StackPanel>
-        
-        <ContentControl x:Name="GamePage" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.Row="1"/>
+
+        <!--ContentPanel - place additional content here-->
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+               
+                <toolkit:PhoneTextBox x:Name="Player" 
+                                      InputScope="PersonalFullName"
+                                      Hint="enter player's name"/>
+                
+                <Button x:Name="AddPlayer">Add Player</Button>
+            </StackPanel>
+            
+            <StackPanel Margin="24,0,0,0" Grid.Column="1"
+                        Visibility="{Binding RecentPlayers, Converter={StaticResource FilledCollectionToVisibilityConverter}}">
+                
+                <TextBlock
+                    
+                    Style="{StaticResource PhoneTextGroupHeaderStyle}">Recent players</TextBlock>
+                
+                <ItemsControl ItemsSource="{Binding RecentPlayers}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Foreground="{StaticResource PhoneAccentBrush}" 
+                                       Padding="{StaticResource PhoneMargin}" 
+                                       Text="{Binding}"
+                                       cal:Message.Attach="[Tap] = [AddPlayer($dataContext)]"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </Grid>
     </Grid>
-    
+
 </phone:PhoneApplicationPage>
