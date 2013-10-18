@@ -22,8 +22,8 @@ namespace BowlingCalculator.UI.ViewModels {
                 var fake = new FakeGames();
 
                 // modify to change designer reaction
-                //Game = fake.PerfectGame();
-                Game = fake.GameInProgress();
+                Game = fake.PerfectGame();
+                //Game = fake.GameInProgress();
                 GameOnPropertyChanged(this, new PropertyChangedEventArgs("IsEnded"));
             }
 
