@@ -97,6 +97,7 @@
     <Compile Include="Controls\RoundButton.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\ImageBrushConverter.cs" />
+    <Compile Include="Converters\ScoreGridTextBrushConverter.cs" />
     <Compile Include="LocalizedStrings.cs" />
     <Compile Include="Models\FakeData.cs" />
     <Compile Include="Models\Release.cs" />
