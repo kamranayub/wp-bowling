@@ -1,8 +1,10 @@
+using System.Windows;
 using System.Windows.Navigation;
 using System.Diagnostics;
 using BowlingCalculator.UI.Controls;
 using BowlingCalculator.UI.ViewModels;
 using BugSense;
+using Caliburn.Micro.BindableAppBar;
 using Microsoft.Phone.Shell;
 
 namespace BowlingCalculator.UI {
@@ -12,7 +14,21 @@ namespace BowlingCalculator.UI {
 	using Microsoft.Phone.Controls;
 	using Caliburn.Micro;
 
-	public class AppBootstrapper : PhoneBootstrapperBase
+    /// <summary>
+    /// Bowling custom phone app bootstrapper
+    /// </summary>
+    public class BowlingBootstrapperBase : PhoneBootstrapperBase {
+
+        /// <summary>
+        /// Enable transitions
+        /// </summary>
+        /// <returns></returns>
+        protected override PhoneApplicationFrame CreatePhoneApplicationFrame() {
+            return new TransitionFrame();
+        }
+    }
+
+    public class AppBootstrapper : BowlingBootstrapperBase
 	{
 		PhoneContainer container;
 
@@ -27,11 +43,16 @@ namespace BowlingCalculator.UI {
 			if (!Execute.InDesignMode)
 				container.RegisterPhoneServices(RootFrame);
 
-			container.PerRequest<MainPageViewModel>();
+			container.Singleton<MainPageViewModel>();
+            container.Singleton<GamePageViewModel>();
+            // works around issue with storage handler
+            // see: https://caliburnmicro.codeplex.com/workitem/340
+            container.Singleton<AddPlayerPageViewModel>();
+
+		    container.PerRequest<PinPickerViewModel>();
             container.PerRequest<AboutPageViewModel>();
             container.PerRequest<ChangelogPageViewModel>();
-		    container.PerRequest<NewGamePageViewModel>();
-		    container.PerRequest<GamePageViewModel>();
+		    	    
 
 			AddCustomConventions();
 
@@ -40,13 +61,18 @@ namespace BowlingCalculator.UI {
 		    HandleFastResume();
            
 #if DEBUG
-            LogManager.GetLog = type => new DebugLogger(type);
+            LogManager.GetLog = type => new DebugLogger(type);            
 #else
             BugSenseHandler.Instance.InitAndStartSession(Application, "");
 		    BugSenseHandler.Instance.UnhandledException += (sender, args) =>
 		        {
 		            if (Debugger.IsAttached) {
 		                Debugger.Break();
+		            }
+		            else {
+		                MessageBox.Show(
+		                    "An error report will be sent so we can improve the app, please try running the app again!",
+		                    "An error occurred", MessageBoxButton.OK);
 		            }
 		        };
 
@@ -75,6 +101,12 @@ namespace BowlingCalculator.UI {
             }
         }
 
+        protected override void OnUnhandledException(object sender, System.Windows.ApplicationUnhandledExceptionEventArgs e) {
+            if (Debugger.IsAttached) {
+                Debugger.Break();
+            }
+        }
+
         private void HandleFastResume() {
 	        bool wasReset = false;
 
@@ -85,7 +117,8 @@ namespace BowlingCalculator.UI {
                         wasReset = true;
 	                }
                     // next call will be New (after the Reset)
-                    else if (e.NavigationMode == NavigationMode.New && wasReset) {
+                    // only cancel if we're heading to MainPage
+                    else if (e.NavigationMode == NavigationMode.New && wasReset && e.Uri.ToString().Contains("MainPage.xaml")) {
                         e.Cancel = true;
                         wasReset = false;
                     }
@@ -112,6 +145,12 @@ namespace BowlingCalculator.UI {
 		}
 
 		static void AddCustomConventions() {
+            // App Bar Conventions
+            ConventionManager.AddElementConvention<BindableAppBarButton>(
+                Control.IsEnabledProperty, "DataContext", "Click");
+            ConventionManager.AddElementConvention<BindableAppBarMenuItem>(
+                Control.IsEnabledProperty, "DataContext", "Click");
+
 		    ConventionManager.AddElementConvention<RoundButton>(Control.IsEnabledProperty, "DataContext", "Click");
 			ConventionManager.AddElementConvention<Pivot>(Pivot.ItemsSourceProperty, "SelectedItem", "SelectionChanged").ApplyBinding =
 				(viewModelType, path, property, element, convention) => {

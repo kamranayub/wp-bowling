@@ -11,14 +11,17 @@
     xmlns:primitives="clr-namespace:System.Windows.Controls.Primitives"
     xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
     xmlns:converters="clr-namespace:BowlingCalculator.UI.Converters"
+    xmlns:bab="clr-namespace:Caliburn.Micro.BindableAppBar;assembly=Caliburn.Micro.BindableAppBar"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    SupportedOrientations="Landscape" Orientation="Landscape"
     mc:Ignorable="d"
+    d:DesignHeight="384"
+    d:DesignWidth="640"
+    Orientation="Landscape"
     d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type=viewModels:GamePageViewModel}"
     cal:Bind.AtDesignTime="True"
-    shell:SystemTray.IsVisible="False">
+    shell:SystemTray.IsVisible="False">    
     
     <phone:PhoneApplicationPage.Resources>
         <SolidColorBrush x:Key="ScoreGridColor" Color="{StaticResource PhoneForegroundColor}"/>
@@ -26,164 +29,179 @@
     </phone:PhoneApplicationPage.Resources>
 
     <!--LayoutRoot is the root grid where all page content is placed-->
-    <Grid x:Name="LayoutRoot" Background="Transparent">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <Grid Margin="{StaticResource PhoneHorizontalMargin}">
 
-        <!--TitlePanel contains the name of the application and page title-->
-        <StackPanel Grid.Row="0" Margin="12,17,0,0">
-            <TextBlock Text="BOWLING CALCULATOR" Style="{StaticResource PhoneTextNormalStyle}"/>            
-        </StackPanel>
+        <Grid>
+            <bab:BindableAppBar>
+                <bab:BindableAppBar.Buttons>
+                    <bab:BindableAppBarButton
+                        x:Name="About"
+                        Text="About"
+                        IconUri="/Assets/appbar.question.png" />
 
-        <Grid x:Name="GamePanel" Visibility="{Binding Game.IsEnded, Converter={StaticResource NotBooleanToVisibilityConverter}}" Grid.Row="1" Margin="12,0,12,0">
-            
-            <StackPanel Margin="{StaticResource PhoneMargin}">
-                <toolkit:ListPicker x:Name="PinPicker" FullModeHeader="Pins Knocked Down" ExpansionMode="FullScreenOnly" Visibility="Collapsed">
-                    <toolkit:ListPicker.FullModeItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding}" FontSize="{StaticResource PhoneFontSizeExtraLarge}"/>
-                        </DataTemplate>
-                    </toolkit:ListPicker.FullModeItemTemplate>
-                </toolkit:ListPicker>
-                
-                <ItemsControl x:Name="BowlingPlayers" ItemsSource="{Binding Game.Players}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            
-                            <StackPanel Margin="0,0,0,20">
-                                
-                                <Grid>
-                                    <TextBlock VerticalAlignment="Bottom" 
-                                               Text="{Binding Name}"
-                                               FontSize="{StaticResource PhoneFontSizeMediumLarge}"
-                                               Foreground="{StaticResource PhoneDisabledBrush}"/>
+                    <bab:BindableAppBarButton
+                        x:Name="Reset"
+                        Text="Reset"
+                        IconUri="/Assets/appbar.redo.png" />
 
-                                    <TextBlock Text="{Binding Score}" 
-                                               TextAlignment="Right" 
-                                               FontSize="{StaticResource PhoneFontSizeExtraLarge}"
-                                               FontFamily="{StaticResource PhoneFontFamilyLight}"/>
-                                </Grid>
-                                
-                                <Grid Margin="0,10,0,0">                                                                                                  
-                                    <ItemsControl ItemsSource="{Binding Frames}" >
-                                        <ItemsControl.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <primitives:UniformGrid Columns="{Binding Frames.Count}" />
-                                            </ItemsPanelTemplate>
-                                        </ItemsControl.ItemsPanel>
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <Border cal:Message.Attach="[Event Tap] = [PickPins($dataContext)]"  
-                                                        BorderBrush="{StaticResource ScoreGridColor}" 
-                                                        BorderThickness="1" 
-                                                        Margin="0,0,0,0">
-                                                    <Grid>
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="45*"/>
-                                                            <ColumnDefinition Width="65*"/>
-                                                        </Grid.ColumnDefinitions>
-                                                        <Grid.RowDefinitions>
-                                                            <RowDefinition Height="*"/>
-                                                            <RowDefinition Height="*"/>
-                                                        </Grid.RowDefinitions>
-                                                        
-                                                        <Border Visibility="{Binding IsCurrentFrame, Converter={StaticResource BooleanToVisibilityConverter}}" 
-                                                                Grid.ColumnSpan="3" 
-                                                                Grid.RowSpan="2" 
-                                                                Background="{StaticResource PhoneAccentBrush}"/>
-                                                    
-                                                        <!-- Ball 1 -->
-                                                        <TextBlock Grid.Column="0"
-                                                                   TextAlignment="Center"
-                                                                   Text="{Binding Ball1DisplayText}"
-                                                                   Foreground="{Binding Text, Converter={StaticResource ScoreGridTextBrushConverter}, RelativeSource={RelativeSource Self}}"/>
-                                                    
-                                                        <!-- Ball 2 -->
-                                                        <Grid Grid.Column="1">
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="*"/>
-                                                                <ColumnDefinition Width="Auto"/>
-                                                            </Grid.ColumnDefinitions>
-                                                            <Border BorderBrush="{StaticResource ScoreGridColor}" BorderThickness="1,0,0,1">
-                                                                <TextBlock 
-                                                                    Margin="3,0,3,0" 
-                                                                    TextAlignment="Center" 
-                                                                    Foreground="{Binding Text, Converter={StaticResource ScoreGridTextBrushConverter}, RelativeSource={RelativeSource Self}}" 
-                                                                    Text="{Binding Ball2DisplayText}"/>
-                                                            </Border>
+                    <bab:BindableAppBarButton
+                        x:Name="AddPlayer"
+                        Text="Add User"
+                        IconUri="/Assets/appbar.user.add.png" />
 
-                                                            <!-- Ball 3 -->
-                                                            <Border Grid.Column="1" MinWidth="20" Visibility="{Binding IsLast, Converter={StaticResource BooleanToVisibilityConverter}}" BorderBrush="{StaticResource ScoreGridColor}" BorderThickness="1,0,0,1">
-                                                                <TextBlock 
-                                                                    Margin="3,0,3,0" 
-                                                                    TextAlignment="Center" 
-                                                                    Foreground="{Binding Ball3DisplayText, Converter={StaticResource ScoreGridTextBrushConverter}}" 
-                                                                    Text="{Binding Ball3DisplayText}"/>
-                                                            </Border>
-                                                        </Grid>
-                                                        
-                                                        <TextBlock Grid.ColumnSpan="2" 
-                                                                   Grid.Row="1" 
-                                                                   TextAlignment="Center"
-                                                                   Margin="0,3,0,3"                                                                   
-                                                                   FontSize="{StaticResource PhoneFontSizeMediumLarge}"
-                                                                   Text="{Binding CumulativeScore}"/>
-                                                    </Grid>
-                                                </Border>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>                                                                   
-                                </Grid>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>                              
-                
-            </StackPanel>
-            
-        </Grid>
 
-        <Grid x:Name="GameOverPanel" Visibility="{Binding Game.IsEnded, Converter={StaticResource BooleanToVisibilityConverter}}" Grid.Row="1" Margin="12,28,12,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            
-            <StackPanel Grid.Column="0" HorizontalAlignment="Center">
-                
-                <TextBlock TextAlignment="Center"
-                           Margin="{StaticResource PhoneVerticalMargin}"
-                           Foreground="{StaticResource PhoneSubtleBrush}">And the winner is...</TextBlock>
+                </bab:BindableAppBar.Buttons>
+            </bab:BindableAppBar>
 
-                <TextBlock TextAlignment="Center" 
-                           Text="{Binding Winner.Name}"
-                           FontSize="{StaticResource PhoneFontSizeExtraExtraLarge}"/>
-                <TextBlock TextAlignment="Center" 
-                           Text="{Binding Winner.Score}"
-                           FontSize="{StaticResource PhoneFontSizeHuge}"/>                
-            </StackPanel>
-            <StackPanel Grid.Column="1" HorizontalAlignment="Center">
-                <TextBlock TextAlignment="Center"
+            <StackPanel x:Name="StartGamePanel" Visibility="{Binding Game.Players, Converter={StaticResource EmptyCollectionToVisibilityConverter}}">
+                <TextBlock Margin="{StaticResource PhoneMargin}"
+                           Style="{StaticResource PhoneTextTitle1Style}">get started</TextBlock>
+                <TextBlock Margin="{StaticResource PhoneMargin}"
+                           TextWrapping="Wrap"
+                           FontFamily="{StaticResource PhoneFontFamilyLight}"
                            Foreground="{StaticResource PhoneSubtleBrush}"
-                           Margin="{StaticResource PhoneVerticalMargin}">Runner-ups</TextBlock>
-
-                <ItemsControl ItemsSource="{Binding RunnerUps}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                <TextBlock Text="{Binding Name}"
-                                           Margin="{StaticResource PhoneMargin}"/>
-                                <TextBlock Text="{Binding Score}"
-                                           Margin="{StaticResource PhoneMargin}"
-                                           Foreground="{StaticResource PhoneSubtleBrush}"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                           FontSize="{StaticResource PhoneFontSizeExtraLarge}">Add a player using the appbar to get started!</TextBlock>
             </StackPanel>
+
+            <Grid x:Name="GamePanel" Visibility="{Binding Game.IsEnded, Converter={StaticResource NotBooleanToVisibilityConverter}}" Grid.Row="1" Margin="12,0,12,0">
+                <ScrollViewer>
+                    <StackPanel Margin="{StaticResource PhoneMargin}">
+                        <ItemsControl x:Name="BowlingPlayers" ItemsSource="{Binding Game.Players}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+
+                                    <StackPanel Margin="0,0,0,20">
+
+                                        <Grid>
+                                            <TextBlock VerticalAlignment="Bottom" 
+                                                       Text="{Binding Name}"
+                                                       FontSize="{StaticResource PhoneFontSizeMediumLarge}"
+                                                       Foreground="{StaticResource PhoneDisabledBrush}"/>
+
+                                            <TextBlock Text="{Binding Score}" 
+                                                       TextAlignment="Right" 
+                                                       FontSize="{StaticResource PhoneFontSizeExtraLarge}"
+                                                       FontFamily="{StaticResource PhoneFontFamilyLight}"/>
+                                        </Grid>
+
+                                        <Grid Margin="0,10,0,0">
+                                            <ItemsControl ItemsSource="{Binding Frames}" >
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <primitives:UniformGrid Columns="{Binding Frames.Count}" />
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border cal:Message.Attach="[Event Tap] = [PickPins($dataContext)]"  
+                                                                BorderBrush="{StaticResource ScoreGridColor}" 
+                                                                BorderThickness="1" 
+                                                                Margin="0,0,0,0">
+                                                            <Grid>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="45*"/>
+                                                                    <ColumnDefinition Width="65*"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <Grid.RowDefinitions>
+                                                                    <RowDefinition Height="*"/>
+                                                                    <RowDefinition Height="*"/>
+                                                                </Grid.RowDefinitions>
+
+                                                                <Border Visibility="{Binding IsCurrentFrame, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                                                                        Grid.ColumnSpan="3" 
+                                                                        Grid.RowSpan="2" 
+                                                                        Background="{StaticResource PhoneAccentBrush}"/>
+
+                                                                <!-- Ball 1 -->
+                                                                <TextBlock Grid.Column="0"
+                                                                           TextAlignment="Center"
+                                                                           Text="{Binding Ball1DisplayText}"
+                                                                           Foreground="{Binding Text, Converter={StaticResource ScoreGridTextBrushConverter}, RelativeSource={RelativeSource Self}}"/>
+
+                                                                <!-- Ball 2 -->
+                                                                <Grid Grid.Column="1">
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="*"/>
+                                                                        <ColumnDefinition Width="Auto"/>
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <Border BorderBrush="{StaticResource ScoreGridColor}" BorderThickness="1,0,0,1">
+                                                                        <TextBlock 
+                                                                            Margin="3,0,3,0" 
+                                                                            TextAlignment="Center" 
+                                                                            Foreground="{Binding Text, Converter={StaticResource ScoreGridTextBrushConverter}, RelativeSource={RelativeSource Self}}" 
+                                                                            Text="{Binding Ball2DisplayText}"/>
+                                                                    </Border>
+
+                                                                    <!-- Ball 3 -->
+                                                                    <Border Grid.Column="1" MinWidth="20" Visibility="{Binding IsLast, Converter={StaticResource BooleanToVisibilityConverter}}" BorderBrush="{StaticResource ScoreGridColor}" BorderThickness="1,0,0,1">
+                                                                        <TextBlock 
+                                                                            Margin="3,0,3,0" 
+                                                                            TextAlignment="Center" 
+                                                                            Foreground="{Binding Ball3DisplayText, Converter={StaticResource ScoreGridTextBrushConverter}}" 
+                                                                            Text="{Binding Ball3DisplayText}"/>
+                                                                    </Border>
+                                                                </Grid>
+
+                                                                <TextBlock Grid.ColumnSpan="2" 
+                                                                           Grid.Row="1" 
+                                                                           TextAlignment="Center"
+                                                                           Margin="0,3,0,3"                                                                   
+                                                                           FontSize="{StaticResource PhoneFontSizeMediumLarge}"
+                                                                           Text="{Binding CumulativeScore}"/>
+                                                            </Grid>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </Grid>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+
+            <Grid x:Name="GameOverPanel" Visibility="{Binding Game.IsEnded, Converter={StaticResource BooleanToVisibilityConverter}}" Grid.Row="1" Margin="12,28,12,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+
+                    <TextBlock TextAlignment="Center"
+                                   Margin="{StaticResource PhoneVerticalMargin}"
+                                   Foreground="{StaticResource PhoneSubtleBrush}">And the winner is...</TextBlock>
+
+                    <TextBlock TextAlignment="Center" 
+                                   Text="{Binding Winner.Name}"
+                                   FontSize="{StaticResource PhoneFontSizeExtraExtraLarge}"/>
+                    <TextBlock TextAlignment="Center" 
+                                   Text="{Binding Winner.Score}"
+                                   FontSize="{StaticResource PhoneFontSizeHuge}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                    <TextBlock TextAlignment="Center"
+                                   Foreground="{StaticResource PhoneSubtleBrush}"
+                                   Margin="{StaticResource PhoneVerticalMargin}">Runner-ups</TextBlock>
+
+                    <ItemsControl ItemsSource="{Binding RunnerUps}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Name}"
+                                                   Margin="{StaticResource PhoneMargin}"/>
+                                    <TextBlock Text="{Binding Score}"
+                                                   Margin="{StaticResource PhoneMargin}"
+                                                   Foreground="{StaticResource PhoneSubtleBrush}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Grid>
         </Grid>
     </Grid>
-
 </phone:PhoneApplicationPage>

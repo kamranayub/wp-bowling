@@ -3,19 +3,18 @@ using Caliburn.Micro;
 
 namespace BowlingCalculator.UI.ViewModels {
     public class MainPageViewModel : BaseViewModel {
-        private readonly INavigationService _navigation;
 
-        public MainPageViewModel(INavigationService navigation) {
-            if (navigation == null) throw new ArgumentNullException("navigation");
-            _navigation = navigation;
+        public MainPageViewModel(Func<GamePageViewModel> gamePageFactory) {            
+            GamePage = gamePageFactory();
+
+            // Initiate the viewmodel lifecycle
+            GamePage.ActivateWith(this);
+            GamePage.DeactivateWith(this);
         }
 
-        public void NewGame() {
-            _navigation.UriFor<NewGamePageViewModel>().Navigate();
-        }
-
-        public void About() {
-            _navigation.UriFor<AboutPageViewModel>().Navigate();
-        }
+        /// <summary>
+        /// Caliburn will bind the view associated with this view model to any ContentControl
+        /// </summary>
+        public GamePageViewModel GamePage { get; set; }
     }
 }

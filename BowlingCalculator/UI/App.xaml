@@ -10,6 +10,8 @@
         <local:LocalizedStrings x:Key="LocalizedStrings"/>
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:NotBooleanToVisibilityConverter x:Key="NotBooleanToVisibilityConverter"/>
+        <converters:FilledCollectionToVisibilityConverter x:Key="FilledCollectionToVisibilityConverter"/>
+        <converters:EmptyCollectionToVisibilityConverter x:Key="EmptyCollectionToVisibilityConverter"/>
     </Application.Resources>
 
 </Application>
