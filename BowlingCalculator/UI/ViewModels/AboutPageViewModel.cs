@@ -23,8 +23,9 @@ namespace BowlingCalculator.UI.ViewModels {
                 Version = "1.0.0";
             }
 
-            Website = "http://bowlingcalcapp.com";
-            SupportSite = "http://getsatisfaction.com/bowlingcalcapp";
+            Website = "http://wp-bowling.tumblr.com";
+            FeedbackSite = "http://wp-bowling.uservoice.com";
+            SupportEmail = "tickets@wp-bowling.uservoice.com";
         }
 
         public string Version {
@@ -38,7 +39,9 @@ namespace BowlingCalculator.UI.ViewModels {
 
         public string Website { get; set; }
 
-        public string SupportSite { get; set; }
+        public string FeedbackSite { get; set; }
+
+        public string SupportEmail { get; set; }
 
         protected override void OnInitialize() {
             base.OnInitialize();
@@ -58,8 +61,16 @@ namespace BowlingCalculator.UI.ViewModels {
             _events.RequestTask<WebBrowserTask>(t => t.Uri = new Uri(Website));
         }
 
-        public void OpenSupportSite() {
-            _events.RequestTask<WebBrowserTask>(t => t.Uri = new Uri(SupportSite));
+        public void OpenFeedbackSite() {
+            _events.RequestTask<WebBrowserTask>(t => t.Uri = new Uri(FeedbackSite));
+        }
+
+        public void OpenSupportEmail() {
+            _events.RequestTask<EmailComposeTask>(t =>
+                {
+                    t.Subject = "Issue with Bowling Calc app";
+                    t.To = SupportEmail;                    
+                });
         }
 
         private Version GetAssemblyVersion() {
