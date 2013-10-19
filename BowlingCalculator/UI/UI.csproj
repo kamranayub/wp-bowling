@@ -170,6 +170,7 @@
   <ItemGroup>
     <Content Include="Assets\AlignmentGrid.png" />
     <Content Include="Assets\appbar.globe.png" />
+    <Content Include="Assets\appbar.lightbulb.png" />
     <Content Include="Assets\appbar.question.png" />
     <Content Include="Assets\appbar.star.png" />
     <Content Include="Assets\ApplicationIcon.png">

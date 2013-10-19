@@ -55,8 +55,10 @@
 
                 <controls:RoundButton x:Name="OpenWebsite" Image="/Assets/appbar.globe.png" Content="Website"/>
 
-                <controls:RoundButton x:Name="OpenSupportSite" Image="/Assets/appbar.question.png" Content="Support"/>
-                                
+                <controls:RoundButton x:Name="OpenFeedbackSite" Image="/Assets/appbar.lightbulb.png" Content="Feedback"/>
+
+                <controls:RoundButton x:Name="OpenSupportEmail" Image="/Assets/appbar.question.png" Content="Support"/>
+
             </StackPanel>
         </Grid>
     </Grid>
