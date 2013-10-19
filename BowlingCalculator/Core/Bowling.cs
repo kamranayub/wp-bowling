@@ -123,6 +123,7 @@ namespace BowlingCalculator.Core {
 
         public void Reset() {
             IsStarted = false;
+            IsEnded = false;
             CurrentPlayer = Players[0];
             CurrentFrame = 1;
 
