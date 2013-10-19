@@ -6,46 +6,51 @@ using System.Globalization;
 using System.Linq;
 using System.Windows;
 using BowlingCalculator.Core;
+using BowlingCalculator.Core.Messages;
 using BowlingCalculator.UI.Controls;
-using BowlingCalculator.UI.Messages;
 using BowlingCalculator.UI.Models;
 using BowlingCalculator.UI.Views;
 using Caliburn.Micro;
 using Microsoft.Phone.Controls;
 
 namespace BowlingCalculator.UI.ViewModels {
-    public class GamePageViewModel : BaseViewModel, IHandle<PlayerAddedMessage> {
+    public class GamePageViewModel : BaseViewModel, IHandle<Game.Started>, IHandle<Game.Ended>, IHandle<Game.Reset>, IHandle<Game.InProgress> {
         private readonly INavigationService _navigation;
         private readonly IEventAggregator _events;
-        private readonly Func<PinPickerViewModel> _pinPickerFactory;
         private BowlingPlayer _winner;
+        private Bowling _game;
 
         public GamePageViewModel()
-            : this(null, null, null) {
+            : this(null, new EventAggregator()) {
 
             // Mock data for design-time
             if (Execute.InDesignMode) {
                 var fake = new FakeGames();
 
                 // modify to change designer reaction
-                //Game = fake.PerfectGame();
+                Game = fake.PerfectGame();
                 //Game = fake.GameInProgress();
-                GameOnPropertyChanged(this, new PropertyChangedEventArgs("IsEnded"));
             }
         }
 
-        public GamePageViewModel(INavigationService navigation, IEventAggregator events, Func<PinPickerViewModel> pinPickerFactory) {
+        public GamePageViewModel(INavigationService navigation, IEventAggregator events) {
             _navigation = navigation;
-            _events = events;
-            _pinPickerFactory = pinPickerFactory;
+            _events = events;            
 
-            Game = new Bowling();
+            Game = new Bowling(events);
             RunnerUps = new BindableCollection<BowlingPlayer>();
-
-            Game.PropertyChanged += GameOnPropertyChanged;
         }
 
-        public Bowling Game { get; set; }
+        public Bowling Game {
+            get { return _game; }
+            set {
+                if (Equals(value, _game)) return;
+                _game = value;
+                NotifyOfPropertyChange(() => Game);
+                NotifyOfPropertyChange(() => CanAddPlayer);
+                NotifyOfPropertyChange(() => CanReset);
+            }
+        }
 
         public BowlingPlayer Winner {
             get { return _winner; }
@@ -61,6 +66,7 @@ namespace BowlingCalculator.UI.ViewModels {
         protected override void OnActivate() {
             base.OnActivate();
             _events.Subscribe(this);
+            _events.Subscribe(Game);
         }
 
         protected override void OnDeactivate(bool close) {
@@ -68,15 +74,12 @@ namespace BowlingCalculator.UI.ViewModels {
 
             if (close) { // listens in background as singleton
                 _events.Unsubscribe(this);
+                _events.Unsubscribe(Game);
             }
         }
 
-        public void About() {
-            _navigation.UriFor<AboutPageViewModel>().Navigate();
-        }
-
         public bool CanAddPlayer {
-            get { return !Game.IsStarted; }
+            get { return !Game.IsInProgress; }
         }
 
         public void AddPlayer() {
@@ -91,13 +94,17 @@ namespace BowlingCalculator.UI.ViewModels {
             var confirmDialog = new CustomMessageBox();
 
             confirmDialog.Title = "Reset the game";
-            confirmDialog.Caption = "Everyone's score will be reset and you'll start over, is that OK?";
-            confirmDialog.LeftButtonContent = "Yes";
-            confirmDialog.RightButtonContent = "No";
+            confirmDialog.Caption = "Clear the scoreboard to keep the same players or start over with new players.\n\nHit the back button to cancel.";
+
+            confirmDialog.IsLeftButtonEnabled = Game.IsInProgress;
+            confirmDialog.LeftButtonContent = "Clear Scores";
+            confirmDialog.RightButtonContent = "Start Over";
 
             confirmDialog.Dismissed += (sender, args) => {
                     if (args.Result == CustomMessageBoxResult.LeftButton) {
                         Game.Reset();
+                    } else if (args.Result == CustomMessageBoxResult.RightButton) {
+                        Game.Reset(true);
                     }
                 };
 
@@ -137,49 +144,52 @@ namespace BowlingCalculator.UI.ViewModels {
             pinPicker.Show();
         }
 
-        /// <summary>
-        /// Handles global event PlayerAddedMessage and adds player
-        /// </summary>
-        /// <param name="message"></param>
-        public void Handle(PlayerAddedMessage message) {
-            Game.AddPlayer(message.Player);
+        public void About() {
+            _navigation.UriFor<AboutPageViewModel>().Navigate();
         }
 
-        private void GameOnPropertyChanged(object sender, PropertyChangedEventArgs e) {
+        #region Message Handling
 
-            // hokey!
-            // maybe better to use event handlers
-            // or just bite the bullet and use IEventAggregator!
+        public void Handle(Game.Started message) {
 
-            if (e.PropertyName == "IsEnded") {
-                OnGameIsEndedChanged();
-            } else if (e.PropertyName == "IsStarted") {
-                OnGameStartedChanged();
+            NotifyOfPropertyChange(() => CanReset);
+            NotifyOfPropertyChange(() => CanAddPlayer);
+        }
+
+        public void Handle(Game.Ended message) {
+
+            NotifyOfPropertyChange(() => CanReset);
+
+            // order players
+            var players = Game.Players.OrderByDescending(p => p.Score);
+
+            // winner
+            Winner = players.FirstOrDefault();
+
+            // runner ups
+            RunnerUps.Clear();
+
+            foreach (var runnerUp in players.Skip(1)) {
+                RunnerUps.Add(runnerUp);
             }
+
         }
 
-        private void OnGameStartedChanged() {
+        public void Handle(Game.Reset message) {
+
+            NotifyOfPropertyChange(() => CanReset);
+            NotifyOfPropertyChange(() => CanAddPlayer);
+
+        }
+
+        public void Handle(Game.InProgress message) {
+
             NotifyOfPropertyChange(() => CanAddPlayer);
             NotifyOfPropertyChange(() => CanReset);
+
         }
 
-        private void OnGameIsEndedChanged() {
-            if (Game.IsEnded) {
-
-                // order players
-                var players = Game.Players.OrderByDescending(p => p.Score);
-
-                // winner
-                Winner = players.FirstOrDefault();
-
-                // runner ups
-                RunnerUps.Clear();
-
-                foreach (var runnerUp in players.Skip(1)) {
-                    RunnerUps.Add(runnerUp);
-                }
-            }
-        }
-
+        #endregion
+        
     }
 }

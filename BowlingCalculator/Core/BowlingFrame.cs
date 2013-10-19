@@ -2,11 +2,10 @@
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using BowlingCalculator.Core.Annotations;
+using Caliburn.Micro;
 
 namespace BowlingCalculator.Core {
-    public class BowlingFrame : INotifyPropertyChanged {
+    public class BowlingFrame : PropertyChangedBase {
         private int? _ball1;
         private int? _ball2;
         private int? _ball3;
@@ -18,11 +17,11 @@ namespace BowlingCalculator.Core {
             private set {
                 if (value == _ball1) return;
                 _ball1 = value;
-                OnPropertyChanged();
-                OnPropertyChanged("Ball1DisplayText");
-                OnPropertyChanged("Ball2DisplayText");
-                OnPropertyChanged("IsStrike");
-                OnPropertyChanged("IsSpare");
+                NotifyOfPropertyChange(() => Ball1);
+                NotifyOfPropertyChange(() => Ball1DisplayText);
+                NotifyOfPropertyChange(() => Ball2DisplayText);
+                NotifyOfPropertyChange(() => IsStrike);
+                NotifyOfPropertyChange(() => IsSpare);
             }
         }
 
@@ -46,11 +45,11 @@ namespace BowlingCalculator.Core {
             private set {
                 if (value == _ball2) return;
                 _ball2 = value;
-                OnPropertyChanged();
-                OnPropertyChanged("Ball2DisplayText");
-                OnPropertyChanged("Ball3DisplayText");
-                OnPropertyChanged("IsStrike");
-                OnPropertyChanged("IsSpare");
+                NotifyOfPropertyChange(() => Ball2);
+                NotifyOfPropertyChange(() => Ball2DisplayText);
+                NotifyOfPropertyChange(() => Ball3DisplayText);
+                NotifyOfPropertyChange(() => IsStrike);
+                NotifyOfPropertyChange(() => IsSpare);
             }
         }
 
@@ -75,8 +74,8 @@ namespace BowlingCalculator.Core {
             private set {
                 if (value == _ball3) return;
                 _ball3 = value;
-                OnPropertyChanged();
-                OnPropertyChanged("Ball3DisplayText");
+                NotifyOfPropertyChange(() => Ball3);
+                NotifyOfPropertyChange(() => Ball3DisplayText);
             }
         }
 
@@ -101,7 +100,7 @@ namespace BowlingCalculator.Core {
             set {
                 if (value == _cumulativeScore) return;
                 _cumulativeScore = value;
-                OnPropertyChanged();
+                NotifyOfPropertyChange(() => CumulativeScore);
             }
         }
 
@@ -110,7 +109,7 @@ namespace BowlingCalculator.Core {
             set {
                 if (value.Equals(_isCurrentFrame)) return;
                 _isCurrentFrame = value;
-                OnPropertyChanged();
+                NotifyOfPropertyChange(() => IsCurrentFrame);
             }
         }
 
@@ -258,15 +257,7 @@ namespace BowlingCalculator.Core {
 
             return Constants.TotalPins;
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
-        }
-
+        
         public void Reset() {
             Ball1 = null;
             Ball2 = null;

@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Caliburn.Micro;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BowlingCalculator.Core.Tests {
     [TestClass]
@@ -8,7 +9,7 @@ namespace BowlingCalculator.Core.Tests {
 
         [TestInitialize]
         public void Setup() {
-            _sut = new Bowling();
+            _sut = new Bowling(new EventAggregator());
         }
 
         [TestMethod]

@@ -2,15 +2,14 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using BowlingCalculator.Core.Annotations;
+using Caliburn.Micro;
 
 namespace BowlingCalculator.Core {
-    public class BowlingPlayer : INotifyPropertyChanged {
+    public class BowlingPlayer : PropertyChangedBase {
         private int _score;
 
         public BowlingPlayer() {
-            Frames = new ObservableCollection<BowlingFrame>();
+            Frames = new BindableCollection<BowlingFrame>();
             for (var i = 0; i < Constants.Frames; i++) {
                 var frame = new BowlingFrame() { Index = i };
                 Frames.Add(frame);
@@ -24,11 +23,11 @@ namespace BowlingCalculator.Core {
             set {
                 if (value == _score) return;
                 _score = value;
-                OnPropertyChanged();
+                NotifyOfPropertyChange(() => Score);
             }
         }
 
-        public ObservableCollection<BowlingFrame> Frames { get; set; }       
+        public IObservableCollection<BowlingFrame> Frames { get; set; }       
 
         public void Bowl(int currentFrame, int pins) {
             Frames[currentFrame - 1].Bowl(pins);
@@ -37,15 +36,7 @@ namespace BowlingCalculator.Core {
         public int GetScore() {
             return Frames.Sum(f => f.GetScore(Frames).GetValueOrDefault());
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
-        }
-
+        
         public void Reset() {
             Score = 0;
 

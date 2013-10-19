@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BowlingCalculator.Core;
+using Caliburn.Micro;
 
 namespace BowlingCalculator.UI.Models {
     public class FakeGames {
@@ -11,7 +12,7 @@ namespace BowlingCalculator.UI.Models {
         private readonly Bowling _game;
 
         public FakeGames() {
-            _game = new Bowling();
+            _game = new Bowling(new EventAggregator());
             _game.AddPlayer("Kamran");
             _game.AddPlayer("Cassie");
         }

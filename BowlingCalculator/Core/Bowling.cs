@@ -1,85 +1,122 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using System;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using BowlingCalculator.Core.Annotations;
+using BowlingCalculator.Core.Messages;
+using Caliburn.Micro;
 
 namespace BowlingCalculator.Core {
-    public class Bowling : INotifyPropertyChanged {
+    public class Bowling : PropertyChangedBase, IHandle<RequestAddPlayerMessage> {
+        private readonly IEventAggregator _events;
         private bool _isEnded;
         private int _currentFrame;
         private BowlingPlayer _currentPlayer;
-        private bool _isStarted;
+        private bool _isInProgress;
+        
+        public Bowling(IEventAggregator events) {
+            if (events == null) throw new ArgumentNullException("events");
+            _events = events;
 
-        public Bowling() {
-            Players = new ObservableCollection<BowlingPlayer>();
-
+            Players = new BindableCollection<BowlingPlayer>();
             CurrentFrame = 1;
         }
 
+        /// <summary>
+        /// The players involved in the game
+        /// </summary>
+        public IObservableCollection<BowlingPlayer> Players { get; private set; }
+
+        /// <summary>
+        /// The current frame
+        /// </summary>
         public int CurrentFrame {
             get { return _currentFrame; }
             private set {
                 if (value == _currentFrame) return;
                 _currentFrame = value;
-                OnPropertyChanged();
+                NotifyOfPropertyChange(() => CurrentFrame);
             }
         }
 
+        /// <summary>
+        /// The current player
+        /// </summary>
         public BowlingPlayer CurrentPlayer {
             get { return _currentPlayer; }
             private set {
                 if (Equals(value, _currentPlayer)) return;
                 _currentPlayer = value;
-                OnPropertyChanged();
+                NotifyOfPropertyChange(() => CurrentPlayer);
+                NotifyOfPropertyChange(() => IsStarted);
             }
-        }
+        }        
 
-        public ObservableCollection<BowlingPlayer> Players { get; private set; }
-
+        /// <summary>
+        /// Whether or not the game has ended (turns finished)
+        /// </summary>
         public bool IsEnded {
             get { return _isEnded; }
             set {
                 if (value.Equals(_isEnded)) return;
                 _isEnded = value;
-                OnPropertyChanged();
+                NotifyOfPropertyChange(() => IsEnded);
+                NotifyOfPropertyChange(() => IsStarted);
             }
         }
 
         /// <summary>
-        /// At least one player has bowled
+        /// Whether or not the game is in progress; at least one player has bowled
         /// </summary>
-        public bool IsStarted {
-            get { return _isStarted; }
+        public bool IsInProgress {
+            get { return _isInProgress; }
             set {
-                if (value.Equals(_isStarted)) return;
-                _isStarted = value;
-                OnPropertyChanged();
+                if (value.Equals(_isInProgress)) return;
+                _isInProgress = value;
+                NotifyOfPropertyChange(() => IsInProgress);
             }
         }
 
+        /// <summary>
+        /// Whether or the game has started; at least one player needs to be present or the game can be over
+        /// </summary>
+        public bool IsStarted {
+            get { return CurrentPlayer != null || IsEnded; }
+        }
+
+        /// <summary>
+        /// Add a new player to the game
+        /// </summary>
+        /// <param name="playerName"></param>
+        /// <returns></returns>
         public BowlingPlayer AddPlayer(string playerName) {
             var newPlayer = new BowlingPlayer() {Name = playerName};
 
-            Players.Add(newPlayer);            
-            OnPropertyChanged("Players");
+            // add player to game
+            Players.Add(newPlayer);
 
             // game hasn't started
-            if (CurrentPlayer == null) {
+            if (!IsStarted) {
                 CurrentPlayer = Players[0];
                 CurrentPlayer.Frames.First().IsCurrentFrame = true;
+
+                _events.Publish(new Game.Started());
             }
+
+            _events.Publish(new Game.PlayerAdded());
 
             return newPlayer;
         }
 
+        /// <summary>
+        /// Throw a ball. State machine.
+        /// </summary>
+        /// <param name="pins"></param>
         public void Bowl(int pins) {
             if (CurrentPlayer == null || IsEnded) return;
 
             // Started
-            if (!IsStarted) {
-                IsStarted = true;
+            if (!IsInProgress) {
+                IsInProgress = true;
+
+                _events.Publish(new Game.InProgress());
             }
 
             // Take turn
@@ -108,7 +145,7 @@ namespace BowlingCalculator.Core {
 
             if (CurrentFrame == Constants.Frames && isLastPlayer && isEndOfTurn) {
                 // End game
-                EndGame();
+                GameOver();
                 return;
             } else if (isEndOfTurn && isLastPlayer) {
                 // Advance frame
@@ -121,17 +158,31 @@ namespace BowlingCalculator.Core {
             }
         }
 
-        public void Reset() {
-            IsStarted = false;
+        /// <summary>
+        /// Resets the game to a started or not started state
+        /// </summary>
+        /// <param name="clearPlayers">Whether or not to remove all players</param>
+        public void Reset(bool clearPlayers = false) {
+            IsInProgress = false;
             IsEnded = false;
-            CurrentPlayer = Players[0];
+            
             CurrentFrame = 1;
 
-            foreach (var player in Players) {
-                player.Reset();
+            if (clearPlayers) {
+                CurrentPlayer = null;
+                Players.Clear();
             }
+            else {
+                CurrentPlayer = Players[0];
 
-            UpdateCurrentFrame();
+                foreach (var player in Players) {
+                    player.Reset();
+                }
+
+                UpdateCurrentFrame();
+            }    
+            
+            _events.Publish(new Game.Reset());
         }
 
         private void NextFrame() {
@@ -151,9 +202,11 @@ namespace BowlingCalculator.Core {
             UpdateCurrentFrame();
         }
 
-        private void EndGame() {
+        private void GameOver() {
             IsEnded = true;
             UpdateCurrentFrame();
+
+            _events.Publish(new Game.Ended());
         }
 
         private void UpdateCurrentFrame() {            
@@ -166,12 +219,14 @@ namespace BowlingCalculator.Core {
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        #region Message Handling
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        public void Handle(RequestAddPlayerMessage message) {
+            if (message.Player != null) {
+                AddPlayer(message.Player);
+            }
         }
+
+        #endregion
     }
 }

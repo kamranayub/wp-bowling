@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BowlingCalculator.Core.Annotations;
-using BowlingCalculator.UI.Messages;
+using BowlingCalculator.Core.Messages;
 using BowlingCalculator.UI.Support;
 using Caliburn.Micro;
 
@@ -69,9 +69,7 @@ namespace BowlingCalculator.UI.ViewModels {
                 RecentPlayers.RemoveRange(RecentPlayers.Skip(5).ToList());
             }
 
-            _navigation.GoBackThenPublish(this, new PlayerAddedMessage(name));
-
-            
+            _navigation.GoBackThenPublish(this, new RequestAddPlayerMessage(name));            
         }
     }
 

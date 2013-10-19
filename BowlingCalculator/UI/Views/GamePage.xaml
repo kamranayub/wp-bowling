@@ -53,7 +53,7 @@
                 </bab:BindableAppBar.Buttons>
             </bab:BindableAppBar>
 
-            <StackPanel x:Name="StartGamePanel" Visibility="{Binding Game.Players, Converter={StaticResource EmptyCollectionToVisibilityConverter}}">
+            <StackPanel x:Name="StartGamePanel" Visibility="{Binding Game.IsStarted, Converter={StaticResource NotBooleanToVisibilityConverter}}">
                 <TextBlock Margin="{StaticResource PhoneMargin}"
                            Style="{StaticResource PhoneTextTitle1Style}">get started</TextBlock>
                 <TextBlock Margin="{StaticResource PhoneMargin}"
