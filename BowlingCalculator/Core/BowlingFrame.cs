@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using BowlingCalculator.Core.Resources;
 using Caliburn.Micro;
 
 namespace BowlingCalculator.Core {
@@ -29,7 +30,7 @@ namespace BowlingCalculator.Core {
             get {
                 if (IsStrike) {
                     if (IsLast) {
-                        return "X";
+                        return CoreResources.StrikeText;
                     }
                     return null;
                 } else if (Ball1.HasValue) {
@@ -56,11 +57,11 @@ namespace BowlingCalculator.Core {
         public string Ball2DisplayText {
             get {
                 if (Ball1 == Constants.TotalPins && !IsLast) {
-                    return "X";
+                    return CoreResources.StrikeText;
                 } else if (Ball2 == Constants.TotalPins && IsLast) {
-                    return "X";
+                    return CoreResources.StrikeText;
                 } else if (IsSpare) {
-                    return "/";
+                    return CoreResources.SpareText;
                 } else if (Ball2.HasValue) {
                     return Ball2.Value.ToString(CultureInfo.InvariantCulture);
                 } else {
@@ -82,9 +83,9 @@ namespace BowlingCalculator.Core {
         public string Ball3DisplayText {
             get {
                 if (Ball3 == 10) {
-                    return "X";
+                    return CoreResources.StrikeText;
                 } else if (Ball2 + Ball3 == 10) {
-                    return "/";
+                    return CoreResources.SpareText;
                 } else if (Ball3.HasValue) {
                     return Ball3.Value.ToString(CultureInfo.InvariantCulture);
                 } else {
@@ -156,7 +157,7 @@ namespace BowlingCalculator.Core {
             }
 
             if (Ball1 != null && Ball2 != null) {
-                throw new BowlingException("Frame is already over");
+                throw new BowlingException(CoreResources.ErrorFrameEnded);
             }
         }
 

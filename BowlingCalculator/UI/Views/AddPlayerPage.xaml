@@ -49,7 +49,7 @@
 
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Text="ADD PLAYER" Style="{StaticResource PhoneTextNormalStyle}"/>            
+            <TextBlock Text="{Binding Path=LocalizedResources.AddPlayerPageTitle, Source={StaticResource LocalizedStrings}, Converter={StaticResource UppercaseTextConverter}}" Style="{StaticResource PhoneTextNormalStyle}"/>            
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
@@ -62,9 +62,10 @@
                
                 <toolkit:PhoneTextBox x:Name="Player" 
                                       InputScope="PersonalFullName"
-                                      Hint="enter player's name"/>
+                                      Hint="{Binding Path=LocalizedResources.AddPlayerNameHintText, Source={StaticResource LocalizedStrings}, Converter={StaticResource LowercaseTextConverter}}"/>
                 
-                <Button x:Name="AddPlayer">Add Player</Button>
+                <Button x:Name="AddPlayer"
+                        Content="{Binding Path=LocalizedResources.AddPlayerButtonText, Source={StaticResource LocalizedStrings}}"/>
             </StackPanel>
             
             <StackPanel Margin="24,0,0,0" Grid.Column="1"
@@ -72,7 +73,8 @@
                 
                 <TextBlock
                     
-                    Style="{StaticResource PhoneTextGroupHeaderStyle}">Recent players</TextBlock>
+                    Style="{StaticResource PhoneTextGroupHeaderStyle}"
+                    Text="{Binding Path=LocalizedResources.AddPlayerRecentPlayers, Source={StaticResource LocalizedStrings}}"/>
                 
                 <ItemsControl ItemsSource="{Binding RecentPlayers}">
                     <ItemsControl.ItemTemplate>

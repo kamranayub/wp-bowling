@@ -36,17 +36,17 @@
                 <bab:BindableAppBar.Buttons>
                     <bab:BindableAppBarButton
                         x:Name="About"
-                        Text="About"
+                        Text="{Binding Path=LocalizedResources.AppBarAbout, Source={StaticResource LocalizedStrings}}"
                         IconUri="/Assets/appbar.question.png" />
 
                     <bab:BindableAppBarButton
                         x:Name="Reset"
-                        Text="Reset"
+                        Text="{Binding Path=LocalizedResources.AppBarReset, Source={StaticResource LocalizedStrings}}"
                         IconUri="/Assets/appbar.redo.png" />
 
                     <bab:BindableAppBarButton
                         x:Name="AddPlayer"
-                        Text="Add User"
+                        Text="{Binding Path=LocalizedResources.AppBarAddPlayer, Source={StaticResource LocalizedStrings}}"
                         IconUri="/Assets/appbar.user.add.png" />
 
 
@@ -55,12 +55,14 @@
 
             <StackPanel x:Name="StartGamePanel" Visibility="{Binding Game.IsStarted, Converter={StaticResource NotBooleanToVisibilityConverter}}">
                 <TextBlock Margin="{StaticResource PhoneMargin}"
-                           Style="{StaticResource PhoneTextTitle1Style}">get started</TextBlock>
+                           Style="{StaticResource PhoneTextTitle1Style}"
+                           Text="{Binding Path=LocalizedResources.GamePageGetStarted, Source={StaticResource LocalizedStrings}, Converter={StaticResource LowercaseTextConverter}}"/>
                 <TextBlock Margin="{StaticResource PhoneMargin}"
                            TextWrapping="Wrap"
                            FontFamily="{StaticResource PhoneFontFamilyLight}"
                            Foreground="{StaticResource PhoneSubtleBrush}"
-                           FontSize="{StaticResource PhoneFontSizeExtraLarge}">Add a player using the appbar to get started!</TextBlock>
+                           FontSize="{StaticResource PhoneFontSizeExtraLarge}"
+                           Text="{Binding Path=LocalizedResources.GamePageGetStartedInstructions, Source={StaticResource LocalizedStrings}}"/>
             </StackPanel>
 
             <Grid x:Name="GamePanel" Visibility="{Binding Game.IsEnded, Converter={StaticResource NotBooleanToVisibilityConverter}}" Grid.Row="1" Margin="12,0,12,0">
@@ -173,7 +175,8 @@
 
                     <TextBlock TextAlignment="Center"
                                    Margin="{StaticResource PhoneVerticalMargin}"
-                                   Foreground="{StaticResource PhoneSubtleBrush}">And the winner is...</TextBlock>
+                                   Foreground="{StaticResource PhoneSubtleBrush}"
+                               Text="{Binding Path=LocalizedResources.GamePageWinnerIntro, Source={StaticResource LocalizedStrings}}"/>
 
                     <TextBlock TextAlignment="Center" 
                                    Text="{Binding Winner.Name}"
@@ -185,7 +188,8 @@
                 <StackPanel Grid.Column="1" HorizontalAlignment="Center">
                     <TextBlock TextAlignment="Center"
                                    Foreground="{StaticResource PhoneSubtleBrush}"
-                                   Margin="{StaticResource PhoneVerticalMargin}">Runner-ups</TextBlock>
+                                   Margin="{StaticResource PhoneVerticalMargin}"
+                               Text="{Binding Path=LocalizedResources.GamePageRunnerUps, Source={StaticResource LocalizedStrings}}"/>
 
                     <ItemsControl ItemsSource="{Binding RunnerUps}">
                         <ItemsControl.ItemTemplate>

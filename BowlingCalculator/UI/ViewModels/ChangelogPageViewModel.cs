@@ -25,13 +25,22 @@ namespace BowlingCalculator.UI.ViewModels {
         protected override void OnViewReady(object view) {
             base.OnViewReady(view);
 
+            var cultureName = System.Globalization.CultureInfo.CurrentCulture.Name;
             var releaseDoc = XDocument.Parse(AppResources.ReleaseNotes);
             var releases = from rNode in releaseDoc.Root.Descendants()
+                           let versionAttr = rNode.Attribute("version")
+                           let notes = from notesNode in rNode.Descendants()
+                                       let langAttr = notesNode.Attribute("lang")
+                                       where langAttr != null && langAttr.Value == cultureName
+                                       select notesNode
+                           where notes != null && 
+                                 notes.Any() && 
+                                 versionAttr != null
                            select
                                new Release()
                                {
-                                   Version = rNode.Attribute("version").Value,
-                                   Notes = rNode.Value
+                                   Version = versionAttr.Value,
+                                   Notes = notes.First().Value
                                };
 
             ReleaseNotes.AddRange(releases);

@@ -29,6 +29,7 @@
                           Width="{StaticResource PhoneFontSizeExtraExtraLarge}"
                           cal:Message.Attach="[Event Tap] = [SelectPins($dataContext)]">
                         <TextBlock Text="{Binding}"
+                                   TextAlignment="Center"
                                    FontSize="{StaticResource PhoneFontSizeExtraLarge}"
                                    Margin="10"/>
                     </Grid>

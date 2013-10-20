@@ -117,101 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ResourceFlowDirection" xml:space="preserve">
-    <value>LeftToRight</value>
-    <comment>Controls the FlowDirection for all elements in the RootFrame. Set to the traditional direction of this resource file's language</comment>
+  <data name="ErrorFrameEnded" xml:space="preserve">
+    <value>Sorry, frame is already over. Please select active frame.</value>
   </data>
-  <data name="ResourceLanguage" xml:space="preserve">
-    <value>en-US</value>
-    <comment>Controls the Language and ensures that the font for all elements in the RootFrame aligns with the app's language. Set to the language code of this resource file's language.</comment>
+  <data name="SpareText" xml:space="preserve">
+    <value>/</value>
   </data>
-  <data name="ApplicationTitle" xml:space="preserve">
-    <value>Bowling Calculator</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="ReleaseNotes" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>ReleaseNotes.xml;System.String, mscorlib, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e;utf-8</value>
-  </data>
-  <data name="ChangelogPageTitle" xml:space="preserve">
-    <value>History</value>
-    <comment>Title for the change log page</comment>
-  </data>
-  <data name="AboutButtonChangelog" xml:space="preserve">
-    <value>View History</value>
-    <comment>About button view changelog</comment>
-  </data>
-  <data name="AboutButtonFeedback" xml:space="preserve">
-    <value>Feedback</value>
-    <comment> About button feedback</comment>
-  </data>
-  <data name="AboutButtonRateAndReview" xml:space="preserve">
-    <value>Rate &amp; Review</value>
-    <comment>About button Rate &amp; Review</comment>
-  </data>
-  <data name="AboutButtonSupport" xml:space="preserve">
-    <value>Support</value>
-    <comment>About button support</comment>
-  </data>
-  <data name="AboutButtonWebsite" xml:space="preserve">
-    <value>Website</value>
-    <comment>About button website</comment>
-  </data>
-  <data name="AboutPageTitle" xml:space="preserve">
-    <value>About</value>
-    <comment>About page title</comment>
-  </data>
-  <data name="AddPlayerButtonText" xml:space="preserve">
-    <value>Add Player</value>
-  </data>
-  <data name="AddPlayerNameHintText" xml:space="preserve">
-    <value>Enter player's name</value>
-  </data>
-  <data name="AddPlayerPageTitle" xml:space="preserve">
-    <value>Add Player</value>
-    <comment>Add player</comment>
-  </data>
-  <data name="AddPlayerRecentPlayers" xml:space="preserve">
-    <value>Recent Players</value>
-  </data>
-  <data name="AppBarAbout" xml:space="preserve">
-    <value>About</value>
-  </data>
-  <data name="AppBarAddPlayer" xml:space="preserve">
-    <value>Add User</value>
-  </data>
-  <data name="AppBarReset" xml:space="preserve">
-    <value>Reset</value>
-  </data>
-  <data name="GamePageGetStarted" xml:space="preserve">
-    <value>Get Started</value>
-    <comment>Get started header text</comment>
-  </data>
-  <data name="GamePageGetStartedInstructions" xml:space="preserve">
-    <value>Add a player using the appbar to get started!</value>
-  </data>
-  <data name="GamePageRunnerUps" xml:space="preserve">
-    <value>Runner-ups</value>
-    <comment>Runner ups header text</comment>
-  </data>
-  <data name="GamePageWinnerIntro" xml:space="preserve">
-    <value>And the winner is...</value>
-    <comment>Introduction text before winner's name</comment>
-  </data>
-  <data name="GamePageResetDialogContent" xml:space="preserve">
-    <value>Clear the scoreboard to keep the same players or start over with new players.
-
-Hit the back button to cancel.</value>
-  </data>
-  <data name="GamePageResetDialogLeftButtonContent" xml:space="preserve">
-    <value>Clear Scores</value>
-  </data>
-  <data name="GamePageResetDialogRightButtonContent" xml:space="preserve">
-    <value>Start Over</value>
-  </data>
-  <data name="GamePageResetDialogTitle" xml:space="preserve">
-    <value>Reset the game</value>
-  </data>
-  <data name="PinPickerDialogTitle" xml:space="preserve">
-    <value>Pins Knocked Down</value>
+  <data name="StrikeText" xml:space="preserve">
+    <value>X</value>
   </data>
 </root>

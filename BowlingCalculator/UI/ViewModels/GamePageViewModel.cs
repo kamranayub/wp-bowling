@@ -9,6 +9,7 @@ using BowlingCalculator.Core;
 using BowlingCalculator.Core.Messages;
 using BowlingCalculator.UI.Controls;
 using BowlingCalculator.UI.Models;
+using BowlingCalculator.UI.Resources;
 using BowlingCalculator.UI.Views;
 using Caliburn.Micro;
 using Microsoft.Phone.Controls;
@@ -93,12 +94,12 @@ namespace BowlingCalculator.UI.ViewModels {
         public void Reset() {
             var confirmDialog = new CustomMessageBox();
 
-            confirmDialog.Title = "Reset the game";
-            confirmDialog.Caption = "Clear the scoreboard to keep the same players or start over with new players.\n\nHit the back button to cancel.";
+            confirmDialog.Title = AppResources.GamePageResetDialogTitle;
+            confirmDialog.Caption = AppResources.GamePageResetDialogContent;
 
             confirmDialog.IsLeftButtonEnabled = Game.IsInProgress;
-            confirmDialog.LeftButtonContent = "Clear Scores";
-            confirmDialog.RightButtonContent = "Start Over";
+            confirmDialog.LeftButtonContent = AppResources.GamePageResetDialogLeftButtonContent;
+            confirmDialog.RightButtonContent = AppResources.GamePageResetDialogRightButtonContent;
 
             confirmDialog.Dismissed += (sender, args) => {
                     if (args.Result == CustomMessageBoxResult.LeftButton) {
@@ -117,19 +118,13 @@ namespace BowlingCalculator.UI.ViewModels {
                 return;
             }
 
-            // Do not show picker if the frame has been completed
-            if (frame.IsDone()) {
-                MessageBox.Show("Sorry, the frame has ended!");
-                return;
-            }
-
             // get available pins for the frame
             var pins = frame.GetAvailablePins();
 
             // configure pin picker
             var pinPicker = this.DismissableDialogFor<PinPickerViewModel>(
                 configureMessageBox: dialog => {
-                        dialog.Title = "Pins Knocked Down";
+                        dialog.Title = AppResources.PinPickerDialogTitle;
                     },
                 configureViewModel: pinPickerModel => {
                         pinPickerModel.AvailablePins = pins;

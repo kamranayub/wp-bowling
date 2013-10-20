@@ -8,6 +8,10 @@
     <Application.Resources>
         <local:AppBootstrapper x:Name="bootstrapper"/>
         <local:LocalizedStrings x:Key="LocalizedStrings"/>
+        
+        <!-- Converters -->
+        <converters:UppercaseTextConverter x:Key="UppercaseTextConverter"/>
+        <converters:LowercaseTextConverter x:Key="LowercaseTextConverter"/>
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:NotBooleanToVisibilityConverter x:Key="NotBooleanToVisibilityConverter"/>
         <converters:FilledCollectionToVisibilityConverter x:Key="FilledCollectionToVisibilityConverter"/>

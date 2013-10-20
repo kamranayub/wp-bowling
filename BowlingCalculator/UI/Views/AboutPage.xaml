@@ -50,8 +50,7 @@
 
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Text="BOWLING CALCULATOR" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock Text="about" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <TextBlock Text="{Binding Path=LocalizedResources.AboutPageTitle, Source={StaticResource LocalizedStrings}, Converter={StaticResource UppercaseTextConverter}}" Style="{StaticResource PhoneTextNormalStyle}"/>            
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
@@ -68,19 +67,19 @@
                            Foreground="{StaticResource PhoneSubtleBrush}"
                            Text="{Binding Version}" />
                 <TextBlock 
-                    Text="view changelog" 
+                    Text="{Binding Path=LocalizedResources.AboutButtonChangelog, Source={StaticResource LocalizedStrings}, Converter={StaticResource LowercaseTextConverter}}" 
                     Foreground="{StaticResource PhoneAccentBrush}"
                     cal:Message.Attach="[Event Tap] = [OpenChangelog]"/>
             </StackPanel>
 
             <StackPanel Grid.Column="1">
-                <controls:RoundButton x:Name="OpenRate" Image="/Assets/appbar.star.png" Content="Rate &amp; Review"/>
+                <controls:RoundButton x:Name="OpenRate" Image="/Assets/appbar.star.png" Content="{Binding Path=LocalizedResources.AboutButtonRateAndReview, Source={StaticResource LocalizedStrings}}"/>
 
-                <controls:RoundButton x:Name="OpenWebsite" Image="/Assets/appbar.globe.png" Content="Website"/>
+                <controls:RoundButton x:Name="OpenWebsite" Image="/Assets/appbar.globe.png" Content="{Binding Path=LocalizedResources.AboutButtonWebsite, Source={StaticResource LocalizedStrings}}"/>
 
-                <controls:RoundButton x:Name="OpenFeedbackSite" Image="/Assets/appbar.lightbulb.png" Content="Feedback"/>
+                <controls:RoundButton x:Name="OpenFeedbackSite" Image="/Assets/appbar.lightbulb.png" Content="{Binding Path=LocalizedResources.AboutButtonFeedback, Source={StaticResource LocalizedStrings}}"/>
 
-                <controls:RoundButton x:Name="OpenSupportEmail" Image="/Assets/appbar.question.png" Content="Support"/>
+                <controls:RoundButton x:Name="OpenSupportEmail" Image="/Assets/appbar.question.png" Content="{Binding Path=LocalizedResources.AboutButtonSupport, Source={StaticResource LocalizedStrings}}"/>
 
             </StackPanel>
         </Grid>
