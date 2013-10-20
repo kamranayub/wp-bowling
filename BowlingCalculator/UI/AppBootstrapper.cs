@@ -63,7 +63,7 @@ namespace BowlingCalculator.UI {
 #if DEBUG
             LogManager.GetLog = type => new DebugLogger(type);            
 #else
-            BugSenseHandler.Instance.InitAndStartSession(Application, "");
+            BugSenseHandler.Instance.InitAndStartSession(Application, Resources.AppSecrets.BugSenseApiKey);
 		    BugSenseHandler.Instance.UnhandledException += (sender, args) =>
 		        {
 		            if (Debugger.IsAttached) {

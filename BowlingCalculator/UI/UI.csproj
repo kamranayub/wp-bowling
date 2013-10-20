@@ -102,6 +102,11 @@
     <Compile Include="LocalizedStrings.cs" />
     <Compile Include="Models\FakeData.cs" />
     <Compile Include="Models\Release.cs" />
+    <Compile Include="Resources\AppSecrets.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppSecrets.resx</DependentUpon>
+    </Compile>
     <Compile Include="Support\NavigationExtensions.cs" />
     <Compile Include="Support\ViewModelExtensions.cs" />
     <Compile Include="ViewModels\AboutPageViewModel.cs" />
@@ -218,6 +223,10 @@
     <EmbeddedResource Include="Resources\AppResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppSecrets.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppSecrets.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
