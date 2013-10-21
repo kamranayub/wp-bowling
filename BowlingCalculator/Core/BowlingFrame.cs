@@ -21,6 +21,7 @@ namespace BowlingCalculator.Core {
                 NotifyOfPropertyChange(() => Ball1);
                 NotifyOfPropertyChange(() => Ball1DisplayText);
                 NotifyOfPropertyChange(() => Ball2DisplayText);
+                NotifyOfPropertyChange(() => Ball3DisplayText);
                 NotifyOfPropertyChange(() => IsStrike);
                 NotifyOfPropertyChange(() => IsSpare);
             }
@@ -47,6 +48,7 @@ namespace BowlingCalculator.Core {
                 if (value == _ball2) return;
                 _ball2 = value;
                 NotifyOfPropertyChange(() => Ball2);
+                NotifyOfPropertyChange(() => Ball1DisplayText);
                 NotifyOfPropertyChange(() => Ball2DisplayText);
                 NotifyOfPropertyChange(() => Ball3DisplayText);
                 NotifyOfPropertyChange(() => IsStrike);
@@ -76,13 +78,17 @@ namespace BowlingCalculator.Core {
                 if (value == _ball3) return;
                 _ball3 = value;
                 NotifyOfPropertyChange(() => Ball3);
+                NotifyOfPropertyChange(() => Ball1DisplayText);
+                NotifyOfPropertyChange(() => Ball2DisplayText);
                 NotifyOfPropertyChange(() => Ball3DisplayText);
+                NotifyOfPropertyChange(() => IsStrike);
+                NotifyOfPropertyChange(() => IsSpare);
             }
         }
 
         public string Ball3DisplayText {
             get {
-                if (Ball3 == 10) {
+                if (Ball3 == Constants.TotalPins) {
                     return CoreResources.StrikeText;
                 } else if (Ball2 + Ball3 == 10) {
                     return CoreResources.SpareText;
