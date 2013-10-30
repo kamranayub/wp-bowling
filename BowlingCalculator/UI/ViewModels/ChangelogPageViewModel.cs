@@ -25,13 +25,14 @@ namespace BowlingCalculator.UI.ViewModels {
         protected override void OnViewReady(object view) {
             base.OnViewReady(view);
 
-            var cultureName = System.Globalization.CultureInfo.CurrentCulture.Name;
+            // Get language code (en, fr, etc.)
+            var languageCode = System.Globalization.CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
             var releaseDoc = XDocument.Parse(AppResources.ReleaseNotes);
             var releases = from rNode in releaseDoc.Root.Descendants()
                            let versionAttr = rNode.Attribute("version")
                            let notes = from notesNode in rNode.Descendants()
                                        let langAttr = notesNode.Attribute("lang")
-                                       where langAttr != null && langAttr.Value == cultureName
+                                       where langAttr != null && langAttr.Value == languageCode
                                        select notesNode
                            where notes != null && 
                                  notes.Any() && 
