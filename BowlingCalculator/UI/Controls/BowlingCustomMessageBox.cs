@@ -1,7 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// (c) Copyright Microsoft Corporation.
+// This source is subject to the Microsoft Public License (Ms-PL).
+// Please see http://go.microsoft.com/fwlink/?LinkID=131993 for details.
+// All other rights reserved.
+//
+// Modified by Kamran Ayub to add DismissOnOverlayTap boolean so that users 
+// can tap off the main content to dismiss the box
+
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -17,9 +22,6 @@ namespace BowlingCalculator.UI.Controls {
     /// Represents a popup dialog with one or two buttons.
     /// </summary>
     /// <QualityBand>Preview</QualityBand>
-    /// <remarks>
-    /// Modified to accept DismissOnOverlayTap so that users can tap off the main content and dismiss the box
-    /// </remarks>
     [TemplatePart(Name = TitleTextBlock, Type = typeof(TextBlock))]
     [TemplatePart(Name = CaptionTextBlock, Type = typeof(TextBlock))]
     [TemplatePart(Name = MessageTextBlock, Type = typeof(TextBlock))]

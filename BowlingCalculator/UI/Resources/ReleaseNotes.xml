@@ -1,12 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <releases>  
   <release version="1.0.0">
-    <notes lang="en-US">
+    <notes lang="en">
     <![CDATA[
-- Calculates bowling scores
-- Supports any number of players
-- Supports Fast Resume
-- About page
+Initial release:
+
+* Dead simple to use
+* Support for multiple players
+* Supports resuming a game if you leave the app
+* Supports resetting the game or removing all players to start over
+* English and French localization
+    ]]>
+    </notes>
+    <notes lang="fr">
+      <![CDATA[
+Initial release:
+
+* Dead simple to use
+* Support for multiple players
+* Supports resuming a game if you leave the app
+* Supports resetting the game or removing all players to start over
+* English and French localization
     ]]>
     </notes>
   </release>

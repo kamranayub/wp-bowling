@@ -24,8 +24,9 @@ namespace BowlingCalculator.UI.ViewModels {
             }
 
             Website = "http://wp-bowling.tumblr.com";
+            ProjectSite = "http://github.com/kamranayub/wp-bowling";
             FeedbackSite = "http://wp-bowling.uservoice.com";
-            SupportEmail = "tickets@wp-bowling.uservoice.com";
+            SupportEmail = "tickets@wp-bowling.uservoice.com";            
         }
 
         public string Version {
@@ -38,6 +39,8 @@ namespace BowlingCalculator.UI.ViewModels {
         }
 
         public string Website { get; set; }
+
+        public string ProjectSite { get; set; }
 
         public string FeedbackSite { get; set; }
 
@@ -71,6 +74,10 @@ namespace BowlingCalculator.UI.ViewModels {
                     t.Subject = "Issue with Bowling Calc app";
                     t.To = SupportEmail;                    
                 });
+        }
+
+        public void OpenProjectSite() {
+            _events.RequestTask<WebBrowserTask>(t => t.Uri = new Uri(ProjectSite));
         }
 
         private Version GetAssemblyVersion() {

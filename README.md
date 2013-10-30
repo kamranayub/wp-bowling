@@ -1,13 +1,44 @@
 Windows Phone Bowling Calculator 
-==========
+================================
 
-A live Windows Phone store application that lets users calculate bowling games for multiple players.
-Leverages Caliburn and other open source projects to make it easy to maintain and update.
+A Windows Phone application that calculates the scores for multiple players in a bowling game.
 
-Created by [Kamran Ayub](http://kamranicus.com) for his own personal needs and to use as a basis for 
-[his talk at Twin Cities Code Camp 15](http://kamranicus.com/Blog/Posts/77/tccc15-leveling-up-your-windows-phone-app).
+Created by [Kamran Ayub](http://kamranicus.com) as a production app and to use as a reference
+on building Windows Phone applications using common patterns & practices.
+
+You can download the Bowling Calculator app by visting the Windows Phone store.
+
+Features
+========
+
+* Dead simple to use
+* Support for multiple players
+* Supports resuming a game if you leave the app
+* Supports resetting the game or removing all players to start over
+* English and French localization
+
+Contributing
+============
+
+Please feel free to send a pull request or open an issue for any bugs/enhancements. This app is not meant to
+track games over time, it's very focused on the use case of calculating a game's score. There are other apps
+that track games over time or provide stats or more features.
+
+Building
+========
+
+## Prerequisites
+
+* Microsoft Visual Studio 2012 or above
+* Windows Phone 8.0 SDK
+
+You will need to create a RESX file under `Resources` called `AppSecrets.resx` and add a string property
+for `BugSenseApiKey` in order to build. You do not need an actual API key to run locally in Debug mode.
 
 License
 =======
 
-TODO: PENDING
+Licensed under MS-PL. See [License](LICENSE.md).
+
+I would kindly ask that you refrain from publishing a derivative app in the store.
+Instead, please consider contributing back to the project with enhancements or bug fixes.

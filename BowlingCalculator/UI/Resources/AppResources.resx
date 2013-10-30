@@ -214,4 +214,7 @@ Hit the back button to cancel.</value>
   <data name="PinPickerDialogTitle" xml:space="preserve">
     <value>Pins Knocked Down</value>
   </data>
+  <data name="AboutLicense" xml:space="preserve">
+    <value>This app is licensed under MS-PL. You can contribute to it openly at:</value>
+  </data>
 </root>

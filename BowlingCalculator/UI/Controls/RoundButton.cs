@@ -9,6 +9,13 @@ using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace BowlingCalculator.UI.Controls {
+
+    /// <summary>
+    /// A Round Button that automatically inverts an image as a selected state.
+    /// </summary>
+    /// <remarks>
+    /// Source: http://www.jayway.com/2011/02/03/create-a-round-button-control-for-windows-phone-7/
+    /// </remarks>
     public class RoundButton : Button {
 
         public static readonly DependencyProperty ImageProperty = DependencyProperty.Register("Image", typeof(ImageSource), typeof(RoundButton), null);

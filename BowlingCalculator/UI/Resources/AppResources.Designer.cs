@@ -106,6 +106,15 @@ namespace BowlingCalculator.UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This app is licensed under MS-PL. You can contribute to it openly at:.
+        /// </summary>
+        public static string AboutLicense {
+            get {
+                return ResourceManager.GetString("AboutLicense", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to About.
         /// </summary>
         public static string AboutPageTitle {

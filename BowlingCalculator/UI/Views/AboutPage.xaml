@@ -59,6 +59,10 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
             
             <StackPanel Grid.Column="0" Margin="{StaticResource PhoneMargin}">
                 <TextBlock Text="Version"/>
@@ -81,6 +85,11 @@
 
                 <controls:RoundButton x:Name="OpenSupportEmail" Image="/Assets/appbar.question.png" Content="{Binding Path=LocalizedResources.AboutButtonSupport, Source={StaticResource LocalizedStrings}}"/>
 
+            </StackPanel>
+            
+            <StackPanel Margin="{StaticResource PhoneMargin}" Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom">
+                <TextBlock Foreground="{StaticResource PhoneSubtleBrush}" Text="{Binding Path=LocalizedResources.AboutLicense, Source={StaticResource LocalizedStrings}}"/>
+                <TextBlock Foreground="{StaticResource PhoneAccentBrush}" Text="{Binding ProjectSite}" cal:Message.Attach="[Tap] = [OpenProjectSite]"/>
             </StackPanel>
         </Grid>
     </Grid>

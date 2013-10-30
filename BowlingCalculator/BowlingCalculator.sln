@@ -7,9 +7,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Tests", "Core.Tests\Core.Tests.csproj", "{BB1ECCC1-4DD6-44A3-998D-75870DA1D68C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resource Libraries", "Resource Libraries", "{0ED85C18-8EE7-4A51-96D6-9413C804C80F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AppResLib", "AppResLib", "{0ED85C18-8EE7-4A51-96D6-9413C804C80F}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AppResLib", "AppResLib\AppResLib.vcxproj", "{5DC70994-0D6E-4B6A-AB4D-CA8D1685395F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1EA13DAC-7569-440B-B1C0-E6FECE79F655}"
+	ProjectSection(SolutionItems) = preProject
+		..\LICENSE.md = ..\LICENSE.md
+		..\README.md = ..\README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
