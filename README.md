@@ -8,6 +8,8 @@ on building Windows Phone applications using common patterns & practices.
 
 You can download the Bowling Calculator app by visting the Windows Phone store.
 
+![Game in progress](/BowlingCalculator/Assets/WXGA/wxga-game-in-progress.png)
+
 Features
 ========
 
