@@ -14,13 +14,13 @@ Initial release:
     </notes>
     <notes lang="fr">
       <![CDATA[
-Initial release:
+Version initiale:
 
-* Dead simple to use
-* Support for multiple players
-* Supports resuming a game if you leave the app
-* Supports resetting the game or removing all players to start over
-* English and French localization
+* Très facile à utiliser
+* Les plusieurs joueurs
+* Recommencer le jeu si tu le quittes
+* Réinitialiser le jeu ou supprimer tous les joueurs pour recommencer
+* Localisation anglais et français
     ]]>
     </notes>
   </release>

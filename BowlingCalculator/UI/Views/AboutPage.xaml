@@ -65,7 +65,7 @@
             </Grid.RowDefinitions>
             
             <StackPanel Grid.Column="0" Margin="{StaticResource PhoneMargin}">
-                <TextBlock Text="Version"/>
+                <TextBlock Text="{Binding Path=LocalizedResources.AboutVersionLabel, Source={StaticResource LocalizedStrings}}"/>
                 <TextBlock FontSize="{StaticResource PhoneFontSizeExtraExtraLarge}" 
                            FontFamily="{StaticResource PhoneFontFamilySemiBold}"
                            Foreground="{StaticResource PhoneSubtleBrush}"
@@ -88,7 +88,7 @@
             </StackPanel>
             
             <StackPanel Margin="{StaticResource PhoneMargin}" Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom">
-                <TextBlock Foreground="{StaticResource PhoneSubtleBrush}" Text="{Binding Path=LocalizedResources.AboutLicense, Source={StaticResource LocalizedStrings}}"/>
+                <TextBlock Foreground="{StaticResource PhoneSubtleBrush}" Text="{Binding Path=LocalizedResources.AboutLicense, Source={StaticResource LocalizedStrings}}" TextWrapping="Wrap"/>
                 <TextBlock Foreground="{StaticResource PhoneAccentBrush}" Text="{Binding ProjectSite}" cal:Message.Attach="[Tap] = [OpenProjectSite]"/>
             </StackPanel>
         </Grid>

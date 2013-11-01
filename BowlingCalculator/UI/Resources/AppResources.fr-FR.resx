@@ -137,9 +137,17 @@
     <value>Site web</value>
     <comment>About button website</comment>
   </data>
+  <data name="AboutLicense" xml:space="preserve">
+    <value>Cette application est autorisée sous le MS-PL. Vous pouvez le contribuez à :</value>
+    <comment>This app is licensed under MS-PL. You can contribute to it openly at:</comment>
+  </data>
   <data name="AboutPageTitle" xml:space="preserve">
     <value>Déscription</value>
     <comment>About page title</comment>
+  </data>
+  <data name="AboutVersionLabel" xml:space="preserve">
+    <value>Version</value>
+    <comment>Version</comment>
   </data>
   <data name="AddPlayerButtonText" xml:space="preserve">
     <value>Ajouter un joueur</value>

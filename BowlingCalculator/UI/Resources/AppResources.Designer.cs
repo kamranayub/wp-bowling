@@ -124,6 +124,15 @@ namespace BowlingCalculator.UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Version.
+        /// </summary>
+        public static string AboutVersionLabel {
+            get {
+                return ResourceManager.GetString("AboutVersionLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Player.
         /// </summary>
         public static string AddPlayerButtonText {
@@ -291,16 +300,24 @@ namespace BowlingCalculator.UI.Resources {
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
         ///&lt;releases&gt;  
         ///  &lt;release version=&quot;1.0.0&quot;&gt;
-        ///    &lt;notes lang=&quot;en-US&quot;&gt;
+        ///    &lt;notes lang=&quot;en&quot;&gt;
         ///    &lt;![CDATA[
-        ///- Calculates bowling scores
-        ///- Supports any number of players
-        ///- Supports Fast Resume
-        ///- About page
+        ///Initial release:
+        ///
+        ///* Dead simple to use
+        ///* Support for multiple players
+        ///* Supports resuming a game if you leave the app
+        ///* Supports resetting the game or removing all players to start over
+        ///* English and French localization
         ///    ]]&gt;
         ///    &lt;/notes&gt;
-        ///  &lt;/release&gt;
-        ///&lt;/releases&gt;.
+        ///    &lt;notes lang=&quot;fr&quot;&gt;
+        ///      &lt;![CDATA[
+        ///Version initiale:
+        ///
+        ///* Très facile à utiliser
+        ///* Les plusieurs joueurs
+        ///* Recommencer le jeu si tu l [rest of string was truncated]&quot;;.
         /// </summary>
         public static string ReleaseNotes {
             get {
