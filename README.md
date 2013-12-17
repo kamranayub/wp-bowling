@@ -1,12 +1,14 @@
 Windows Phone Bowling Calculator 
 ================================
 
-A Windows Phone application that calculates the scores for multiple players in a bowling game.
+A [Windows Phone application](http://www.windowsphone.com/s?appid=9287a99a-6068-4ff4-925b-988c8c99dbf6) that calculates the scores for multiple players in a bowling game.
 
 Created by [Kamran Ayub](http://kamranicus.com) as a production app and to use as a reference
 on building Windows Phone applications using common patterns & practices.
 
-You can download the Bowling Calculator app by visting the Windows Phone store.
+You can download the Bowling Calculator app by [visting the Windows Phone store](http://www.windowsphone.com/s?appid=9287a99a-6068-4ff4-925b-988c8c99dbf6).
+
+![Game in progress](/BowlingCalculator/Assets/WXGA/wxga-game-in-progress.png)
 
 Features
 ========
