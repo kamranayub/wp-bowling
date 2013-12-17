@@ -79,6 +79,15 @@ namespace BowlingCalculator.UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View Privacy Policy.
+        /// </summary>
+        public static string AboutButtonPrivacy {
+            get {
+                return ResourceManager.GetString("AboutButtonPrivacy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rate &amp; Review.
         /// </summary>
         public static string AboutButtonRateAndReview {
@@ -317,7 +326,8 @@ namespace BowlingCalculator.UI.Resources {
         ///
         ///* Très facile à utiliser
         ///* Les plusieurs joueurs
-        ///* Recommencer le jeu si tu l [rest of string was truncated]&quot;;.
+        ///* Recommencer le jeu si tu le quittes
+        ///* Réinitia [rest of string was truncated]&quot;;.
         /// </summary>
         public static string ReleaseNotes {
             get {

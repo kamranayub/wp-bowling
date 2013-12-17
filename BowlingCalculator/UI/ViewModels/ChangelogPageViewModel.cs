@@ -26,7 +26,7 @@ namespace BowlingCalculator.UI.ViewModels {
             base.OnViewReady(view);
 
             // Get language code (en, fr, etc.)
-            var languageCode = System.Globalization.CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
+            var languageCode = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
             var releaseDoc = XDocument.Parse(AppResources.ReleaseNotes);
             var releases = from rNode in releaseDoc.Root.Descendants()
                            let versionAttr = rNode.Attribute("version")

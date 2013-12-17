@@ -72,8 +72,17 @@
                            Text="{Binding Version}" />
                 <TextBlock 
                     Text="{Binding Path=LocalizedResources.AboutButtonChangelog, Source={StaticResource LocalizedStrings}, Converter={StaticResource LowercaseTextConverter}}" 
+                    TextWrapping="Wrap"
                     Foreground="{StaticResource PhoneAccentBrush}"
+                    Margin="{StaticResource PhoneVerticalMargin}"
                     cal:Message.Attach="[Event Tap] = [OpenChangelog]"/>
+
+                <TextBlock 
+                    Text="{Binding Path=LocalizedResources.AboutButtonPrivacy, Source={StaticResource LocalizedStrings}, Converter={StaticResource LowercaseTextConverter}}" 
+                    TextWrapping="Wrap"
+                    Margin="{StaticResource PhoneVerticalMargin}"
+                    Foreground="{StaticResource PhoneAccentBrush}"
+                    cal:Message.Attach="[Event Tap] = [OpenPrivacy]"/>
             </StackPanel>
 
             <StackPanel Grid.Column="1">

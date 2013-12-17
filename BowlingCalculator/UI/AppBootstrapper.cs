@@ -53,7 +53,6 @@ namespace BowlingCalculator.UI {
             container.PerRequest<AboutPageViewModel>();
             container.PerRequest<ChangelogPageViewModel>();
 		    	    
-
 			AddCustomConventions();
 
             EnableDebugging();

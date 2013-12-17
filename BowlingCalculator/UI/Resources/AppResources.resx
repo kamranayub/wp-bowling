@@ -221,4 +221,7 @@ Hit the back button to cancel.</value>
     <value>Version</value>
     <comment>Version</comment>
   </data>
+  <data name="AboutButtonPrivacy" xml:space="preserve">
+    <value>View Privacy Policy</value>
+  </data>
 </root>

@@ -8,6 +8,7 @@
   <App xmlns="" ProductID="{b9d6e0fa-14c2-42ce-a7b1-435416d7f359}" Title="@AppResLib.dll,-100" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="Kamran Ayub" Description="A simple app that will let you score a bowling game if you prefer not to use a pen and paper." Publisher="Kamran Ayub" PublisherID="{44cf21ba-931e-450f-bb4f-d17a69607d0f}">
     <IconPath IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</IconPath>
     <Capabilities>
+      <Capability Name="ID_CAP_NETWORKING" />
     </Capabilities>
     <Tasks>
       <DefaultTask Name="_default" NavigationPage="Views/MainPage.xaml" ActivationPolicy="Resume" />

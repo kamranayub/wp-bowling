@@ -1,5 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<releases>  
+<releases>
+  <release version="1.0.1">
+    <notes lang="en">
+      <![CDATA[
+Maintenance release:
+
+* Fixed BugSense not reporting data for analytics/bugs
+* Fixed French release notes not displaying if the region wasn't France
+* Added privacy policy link
+    ]]>
+    </notes>
+    <notes lang="fr">
+      <![CDATA[
+Version de maintenance:
+
+* Fixe : BugSense ne rapportait pas l'information pour les analyses ou les erreurs
+* Fixe : Les notes francais ne montrait pas si la région n'était pas la France
+* Ajouter le site web de l'politique de confidentialité
+    ]]>
+    </notes>
+  </release>
   <release version="1.0.0">
     <notes lang="en">
     <![CDATA[

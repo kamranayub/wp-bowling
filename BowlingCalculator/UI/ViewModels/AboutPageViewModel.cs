@@ -24,6 +24,7 @@ namespace BowlingCalculator.UI.ViewModels {
             }
 
             Website = "http://wp-bowling.tumblr.com";
+            PrivacyPolicy = "http://wp-bowling.tumblr.com/privacy";
             ProjectSite = "http://github.com/kamranayub/wp-bowling";
             FeedbackSite = "http://wp-bowling.uservoice.com";
             SupportEmail = "tickets@wp-bowling.uservoice.com";            
@@ -37,6 +38,8 @@ namespace BowlingCalculator.UI.ViewModels {
                 NotifyOfPropertyChange(() => Version);
             }
         }
+
+        public string PrivacyPolicy { get; set; }
 
         public string Website { get; set; }
 
@@ -62,6 +65,11 @@ namespace BowlingCalculator.UI.ViewModels {
 
         public void OpenWebsite() {
             _events.RequestTask<WebBrowserTask>(t => t.Uri = new Uri(Website));
+        }
+
+        public void OpenPrivacy()
+        {
+            _events.RequestTask<WebBrowserTask>(t => t.Uri = new Uri(PrivacyPolicy));
         }
 
         public void OpenFeedbackSite() {
